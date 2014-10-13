@@ -1,0 +1,4 @@
+pyneric
+=======
+
+generic Python library
