@@ -1,5 +1,5 @@
-API (the pyneric package)
-=========================
+API
+===
 
 .. automodule:: pyneric
 .. automodule:: pyneric.future
