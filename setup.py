@@ -36,6 +36,9 @@ setup(
         ],
     package_dir={'': 'src'},
     packages=['pyneric',
-              'pyneric.future'],
+              'pyneric.future',
+              ],
     install_requires=['future'],
+    extras_require={'FileSystemNotifier': ['pyinotify>=0.9'],
+                    },
     )

@@ -1,3 +1,4 @@
 Sphinx
 coveralls
 future
+pyinotify>=0.9
