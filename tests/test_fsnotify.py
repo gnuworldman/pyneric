@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Tests for pyneric.fsnotify"""
+
 try:
     from pyneric import fsnotify
 except ImportError:
@@ -21,7 +24,7 @@ else:
 
 
     # This might need to be increased if the test system is under heavy load.
-    NOTIFIER_WAIT_SECONDS = 1
+    NOTIFIER_WAIT_SECONDS = 2
 
 
     class FileSystemNotifierTestCase(TestCase):
@@ -54,7 +57,8 @@ else:
             self.notifier.add_watch(self.tmp_dir, pyinotify.ALL_EVENTS,
                                     rec=True, auto_add=auto_add)
             # rec=True causes the following for the existing directory.
-            for mask in (pyinotify.IN_OPEN, pyinotify.IN_CLOSE_NOWRITE):
+            for mask in (pyinotify.IN_OPEN, pyinotify.IN_ACCESS,
+                         pyinotify.IN_CLOSE_NOWRITE):
                 event = self.get_event()
                 msg = "Unexpected event: {}".format(str(event))
                 self.assertEqual(dir_path, event.pathname, msg=msg)
@@ -75,6 +79,7 @@ else:
             if auto_add:
                 # auto_add causes new directories to be opened twice.
                 for mask in ((pyinotify.IN_OPEN,) * 2 +
+                             (pyinotify.IN_ACCESS,) * 4 +
                              (pyinotify.IN_CLOSE_NOWRITE,) * 2):
                     event = self.get_event()
                     msg = "Unexpected event: {}".format(str(event))
@@ -103,3 +108,6 @@ else:
 
         def test_notify_auto_add(self):
             self.test_notify(auto_add=True)
+
+        def test_invalid_attribute(self):
+            self.assertRaises(AttributeError, getattr, self.notifier, 'x')

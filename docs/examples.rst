@@ -91,3 +91,13 @@ raise a specific exception
 Traceback (most recent call last):
   ...
 MyException: '1nv4l1d' is not a valid Python identifier.
+
+Make a request to a REST resource
+---------------------------------
+
+>>> class UserAgent(pyneric.rest_requests.RestResource): url_path = 'user-agent'
+
+>>> headers = {'User-Agent': 'Mozilla, but not really', 'Accept': 'application/json'}
+
+>>> UserAgent('http://httpbin.org').get(headers=headers).json()
+{'user-agent': 'Mozilla, but not really'}

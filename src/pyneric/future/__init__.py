@@ -4,6 +4,7 @@
 This is equivalent to future.builtins with additions and customizations.
 
 """
+# flake8: noqa
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -32,8 +33,9 @@ if future.PY2:
 _all.add('python_2_unicode_compatible')
 def python_2_unicode_compatible(cls):
     cls = future.python_2_unicode_compatible(cls)
-    if not future.PY3:
+    if future.PY2:
         cls.__str__ = lambda self: unicode(self.__unicode__()).encode()
     return cls
+python_2_unicode_compatible.__doc__ = future.python_2_unicode_compatible.__doc__
 
 __all__ = list(future.native_str(x) for x in _all)

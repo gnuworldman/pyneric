@@ -20,9 +20,10 @@ suggestions, and questions are `welcome <https://twitter.com/BraveGnuWorld>`_
 Overview
 ========
 
-This library is intended as a place for code whose only scope is Python.  The
-pyneric.future package is intended to include everything needed to easily
-support Python 2.6+ and 3.3+ simultaneously using the Python-Future library.
+This library is intended as a place for Python code whose scope is generic, not
+specific to any particular business domain.  The pyneric.future package is
+intended to include everything needed to easily support Python 2.6+ and 3.3+
+simultaneously using the Python-Future library.
 
 Examples
 ========
@@ -117,3 +118,13 @@ raise a specific exception
 Traceback (most recent call last):
   ...
 MyException: '1nv4l1d' is not a valid Python identifier.
+
+Make a request to a REST resource
+---------------------------------
+
+>>> class UserAgent(pyneric.rest_requests.RestResource): url_path = 'user-agent'
+
+>>> headers = {'User-Agent': 'Mozilla, but not really', 'Accept': 'application/json'}
+
+>>> UserAgent('http://httpbin.org').get(headers=headers).json()
+{'user-agent': 'Mozilla, but not really'}

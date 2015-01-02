@@ -103,7 +103,7 @@ default_role = 'py:obj'
 pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
+modindex_common_prefix = ['pyneric']
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
@@ -344,7 +344,7 @@ epub_exclude_files = ['search.html']
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'python': ('http://docs.python.org/3', None)}
+intersphinx_mapping = {'python': ('http://docs.python.org/{}'.format(sys.version_info[0]), None)}
 
 
 # autodoc configuration

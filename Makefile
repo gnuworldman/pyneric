@@ -5,12 +5,15 @@ SHELL := /bin/bash
 
 all: coverage build doc
 
-test:
-	PYTHONPATH=src coverage run --branch --module unittest discover
+flake:
+	flake8 src
+
+test: flake
+	PYTHONPATH=src:tests coverage run --branch --module unittest discover
 	PYTHONPATH=src python -m doctest docs/examples.rst
 
 coverage: test
-	coverage report
+	coverage report -m
 
 coverage_html: test
 	coverage html

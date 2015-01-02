@@ -4,7 +4,8 @@ Release Notes
 Version 1.0
 -----------
 
-This will be the initial stable release.
+This is the initial stable release.  Some util module functions and the meta
+and rest_requests modules are new.
 
 Version 0.2
 -----------

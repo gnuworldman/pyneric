@@ -56,7 +56,7 @@ def newsuper(typ=_SENTINEL, type_or_obj=_SENTINEL, framedepth=1):
                 # Drill down through any wrappers to the underlying func.
                 # This handles e.g. classmethod() and staticmethod().
                 try:
-                    while not isinstance(meth,FunctionType):
+                    while not isinstance(meth, FunctionType):
                         try:
                             meth = meth.__func__
                         except AttributeError:
@@ -66,10 +66,10 @@ def newsuper(typ=_SENTINEL, type_or_obj=_SENTINEL, framedepth=1):
                 if meth.func_code is f.f_code:
                     break   # Aha!  Found you.
             else:
-                continue    #  Not found! Move onto the next class in MRO.
-            break    #  Found! Break out of the search loop.
-        else:
-            raise RuntimeError('super() called outside a method')  # pragma: no cover
+                continue    # Not found! Move onto the next class in MRO.
+            break    # Found! Break out of the search loop.
+        else:  # pragma: no cover
+            raise RuntimeError('super() called outside a method')
 
     #  Dispatch to builtin super().
     if type_or_obj is not _SENTINEL:

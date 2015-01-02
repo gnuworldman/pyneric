@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""pyneric._version module"""
+"""The `pyneric._version` module contains version information."""
 
-__version_info__ = (0, 2, 0)
+__version_info__ = (1, 0, 0)
 __version__ = '.'.join(str(x) for x in __version_info__)
