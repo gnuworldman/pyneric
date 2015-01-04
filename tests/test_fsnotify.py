@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """Tests for pyneric.fsnotify"""
 
+import warnings
+
 try:
     from pyneric import fsnotify
 except ImportError:
-    import warnings
     warnings.warn("The tests for pyneric.fsnotify will not be run since the "
                   "module is not functional in the current Python environment."
                   "  Install pyinotify >= 0.9 to enable these tests.",
@@ -39,6 +40,21 @@ else:
         def tearDown(self):
             self.notifier.stop()
 
+        def assert_events(self, expected):
+            access_inconsistent = False
+            actual = [(x.pathname, x.mask) for x in self.get_events()]
+            # Handle circumstances where IN_ACCESS events are inconsistent.
+            if expected != actual:
+                def strip_access(data):
+                    return [(path, mask) for path, mask in data
+                            if not (mask & pyinotify.IN_ACCESS)]
+                expected = strip_access(expected)
+                actual = strip_access(actual)
+                access_inconsistent = True
+            self.assertEqual(expected, actual)
+            if access_inconsistent:
+                warnings.warn("Inotify ACCESS events were inconsistent.")
+
         def get_events(self):
             while True:
                 try:
@@ -57,8 +73,7 @@ else:
             masks = [pyinotify.IN_OPEN, pyinotify.IN_ACCESS,
                      pyinotify.IN_CLOSE_NOWRITE]
             expected = [(dir_path, x | pyinotify.IN_ISDIR) for x in masks]
-            actual = [(x.pathname, x.mask) for x in self.get_events()]
-            self.assertEqual(expected, actual)
+            self.assert_events(expected)
 
             # Create a new subdirectory.
             new_dir_path = os.path.join(self.tmp_dir, "new_dir")
@@ -70,8 +85,7 @@ else:
                              [pyinotify.IN_ACCESS] * 4 +
                              [pyinotify.IN_CLOSE_NOWRITE] * 2)
             expected = [(new_dir_path, x | pyinotify.IN_ISDIR) for x in masks]
-            actual = [(x.pathname, x.mask) for x in self.get_events()]
-            self.assertEqual(expected, actual)
+            self.assert_events(expected)
 
             # Create a file under the preexisting then the new directory.
             for dir_ in (dir_path, new_dir_path):
@@ -84,8 +98,7 @@ else:
                                   pyinotify.IN_MODIFY,
                                   pyinotify.IN_CLOSE_WRITE])
                 expected = [(file_path, x) for x in masks]
-                actual = [(x.pathname, x.mask) for x in self.get_events()]
-                self.assertEqual(expected, actual)
+                self.assert_events(expected)
 
             # No more events are expected.
             events = list(self.get_events())
