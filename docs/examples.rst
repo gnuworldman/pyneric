@@ -99,5 +99,5 @@ Make a request to a REST resource
 
 >>> headers = {'User-Agent': 'Mozilla, but not really', 'Accept': 'application/json'}
 
->>> UserAgent('http://httpbin.org').get(headers=headers).json()
-{'user-agent': 'Mozilla, but not really'}
+>>> str(UserAgent('http://httpbin.org').get(headers=headers).json()['user-agent'])
+'Mozilla, but not really'
