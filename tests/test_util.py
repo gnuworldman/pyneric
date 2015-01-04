@@ -124,9 +124,13 @@ class ModuleAttributesTestCase(TestCase):
         expected |= {'__all__', '__builtins__', '__doc__', '__file__',
                      '__name__', '__package__'}
         if not utils.PY2:
-            expected |= {'__cached__', '__loader__', '__spec__'}
-        self.assertEqual(expected, self.func(test_module, use_all=False,
-                                             include_underscored=True))
+            expected |= {'__cached__', '__loader__'}
+        actual = self.func(test_module, use_all=False,
+                           include_underscored=True)
+        if not utils.PY2:
+            for possibility in ('__spec__', '__initializing__'):
+                pyneric.tryf(actual.remove, possibility, _except=KeyError)
+        self.assertEqual(expected, actual)
 
     def test_use_all_without_all(self):
         import importlib
