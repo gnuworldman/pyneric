@@ -1,5 +1,0 @@
-Sphinx
-coveralls
-flake8
-future
-pyinotify>=0.9
