@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.util &mdash; pyneric 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">pyneric 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pyneric.util</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;The `pyneric.util` module contains generic utility functions.&quot;&quot;&quot;</span>
+
+<span class="c"># Support Python 2 &amp; 3.</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+                        <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyneric.future</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">keyword</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;add_to_all&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="add_to_all"><a class="viewcode-back" href="../../module/util.html#pyneric.util.add_to_all">[docs]</a><span class="k">def</span> <span class="nf">add_to_all</span><span class="p">(</span><span class="n">named_object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add the name of the given object to its module&#39;s *__all__* attribute.</span>
+
+<span class="sd">    :param object named_object: anything with a *__name__* attribute</span>
+<span class="sd">    :returns: *named_object* (unchanged)</span>
+<span class="sd">    :raises TypeError: if the *__all__* attribute of `named_object`&#39;s module is</span>
+<span class="sd">                       not a `list`, `set`, or `tuple`</span>
+
+<span class="sd">    This is meant to be used as a decorator for objects with a *__name__*</span>
+<span class="sd">    attribute (such as functions and classes) defined in a module&#39;s global</span>
+<span class="sd">    namespace.</span>
+
+<span class="sd">    The applicable module is determined by passing *named_object* to</span>
+<span class="sd">    :func:`inspect.getmodule`.  It is not recommended to pass an object that is</span>
+<span class="sd">    not in the module&#39;s global namespace.  Passing an imported object attempts</span>
+<span class="sd">    to add the name to the *__all__* attribute of the module in which the</span>
+<span class="sd">    object was defined (also not recommended).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">named_object</span><span class="p">)</span>
+    <span class="nb">all</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">__all__</span>
+    <span class="n">object_name</span> <span class="o">=</span> <span class="n">named_object</span><span class="o">.</span><span class="n">__name__</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">all</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="nb">all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">object_name</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">all</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+        <span class="nb">all</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">object_name</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">all</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">module</span><span class="o">.</span><span class="n">__all__</span> <span class="o">+=</span> <span class="p">(</span><span class="n">object_name</span><span class="p">,)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s">&quot;The type of __all__ ({}) in {} is unsupported.&quot;</span>
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="nb">all</span><span class="p">),</span> <span class="n">module</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">named_object</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="get_from_dict_or_objects"><a class="viewcode-back" href="../../module/util.html#pyneric.util.get_from_dict_or_objects">[docs]</a><span class="k">def</span> <span class="nf">get_from_dict_or_objects</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">objects</span><span class="p">,</span> <span class="n">pop_from_dict</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attempt to get a value via name from a mapping then from objects.</span>
+
+<span class="sd">    :param str name: the name for which to look</span>
+<span class="sd">    :param dict dict: the mapping in which to look first (by key)</span>
+<span class="sd">    :param objects: the objects in which to look after *dict* (by attribute)</span>
+<span class="sd">    :type objects: sequence of `object`\ s</span>
+<span class="sd">    :param bool pop_from_dict: whether to :meth:`~dict.pop` rather than</span>
+<span class="sd">                               :meth:`~dict.get` from *dict*</span>
+<span class="sd">    :returns: the value found first</span>
+<span class="sd">    :raises KeyError: if *dict* contains no such key and none of the *objects*</span>
+<span class="sd">                      contain any such attribute</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pop_from_dict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">raise</span> <span class="n">exc</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="module_attributes"><a class="viewcode-back" href="../../module/util.html#pyneric.util.module_attributes">[docs]</a><span class="k">def</span> <span class="nf">module_attributes</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">use_all</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">include_underscored</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a set of the attribute names in the given module.</span>
+
+<span class="sd">    :param module module: the module from which to get the attribute names</span>
+<span class="sd">    :param bool use_all: whether to find attribute names from the module&#39;s</span>
+<span class="sd">                         *__all__* attribute (`None` means only if it exists)</span>
+<span class="sd">    :param bool include_underscored: whether to include attribute names that</span>
+<span class="sd">                                     begin with an underscore when the</span>
+<span class="sd">                                     *__all__* attribute is not used</span>
+<span class="sd">    :rtype: `set`</span>
+<span class="sd">    :raises AttributeError: if *use_all* is true and *module* has no *__all__*</span>
+<span class="sd">                            attribute</span>
+
+<span class="sd">    When the attribute names are not gotten from the module&#39;s *__all__*</span>
+<span class="sd">    attribute, then the module is passed to :func:`dir` to get the names.</span>
+
+<span class="sd">    Passing a true value for `use_all` is a convenience for the caller when it</span>
+<span class="sd">    requires that the module shall have an *__all__* attribute and an exception</span>
+<span class="sd">    shall be raised if it does not.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">use_all</span> <span class="ow">or</span> <span class="n">use_all</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s">&#39;__all__&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">__all__</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">include_underscored</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">))</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="pascalize"><a class="viewcode-back" href="../../module/util.html#pyneric.util.pascalize">[docs]</a><span class="k">def</span> <span class="nf">pascalize</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the conversion of the given string value to Pascal casing.</span>
+
+<span class="sd">    :param str value: the string to convert</span>
+<span class="sd">    :param bool validate: whether to also validate that *value* is a valid</span>
+<span class="sd">                          Python identifier</span>
+<span class="sd">    :rtype: `str`</span>
+<span class="sd">    :raises TypeError: if *value* is not a string</span>
+<span class="sd">    :raises ValueError: if *validate* is true and *value* fails validation</span>
+
+<span class="sd">    This converts lower-case characters preceded by an underscore to upper-case</span>
+<span class="sd">    without the underscore.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+        <span class="n">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{!r} is not a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">result_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;(?:^|_)(.)&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">result_type</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result_type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="raise_attribute_error"><a class="viewcode-back" href="../../module/util.html#pyneric.util.raise_attribute_error">[docs]</a><span class="k">def</span> <span class="nf">raise_attribute_error</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise an instance of `AttributeError` with the standard message.</span>
+
+<span class="sd">    :param object obj: the object that is said to not have the attribute</span>
+<span class="sd">    :param str attr: the attribute that *object* does not have</span>
+<span class="sd">    :raises AttributeError:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">what</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;type object {!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="k">else</span>
+            <span class="s">&quot;{!r} object&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;{} has no attribute {!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<span class="c"># PY2 note: The definition would be the following in Python 3+:</span>
+<span class="c"># def tryf(func, *args, _except=Exception, _return=None, **kwargs):</span>
+<div class="viewcode-block" id="tryf"><a class="viewcode-back" href="../../module/util.html#pyneric.util.tryf">[docs]</a><span class="k">def</span> <span class="nf">tryf</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrap a function call in a try/except statement.</span>
+
+<span class="sd">    :param function func: the function to call</span>
+<span class="sd">    :param args: the positional arguments to pass to *func*</span>
+<span class="sd">    :param kwargs: the keyword arguments to pass to *func*</span>
+<span class="sd">    :param _except: the exception(s) to catch</span>
+<span class="sd">    :type _except: `BaseException` or sequence of such</span>
+<span class="sd">    :param _return: the value to return if calling *func* raises *_except*</span>
+
+<span class="sd">    If *func* expects keyword arguments named &#39;_except&#39; or &#39;_return&#39;, it will</span>
+<span class="sd">    never receive them, so the try statement should be used for those instead</span>
+<span class="sd">    of this function.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># PY2 note: The _except and _return assignments should be removed when the</span>
+    <span class="c"># function definition changes to Python 3+ syntax.</span>
+    <span class="n">_except</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;_except&#39;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span>
+    <span class="n">_return</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;_return&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">_except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_return</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="underscore"><a class="viewcode-back" href="../../module/util.html#pyneric.util.underscore">[docs]</a><span class="k">def</span> <span class="nf">underscore</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">multicap</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the conversion of the given string value to variable casing.</span>
+
+<span class="sd">    :param str value: the string to convert</span>
+<span class="sd">    :param bool validate: whether to also validate that *value* is a valid</span>
+<span class="sd">                          Python identifier</span>
+<span class="sd">    :param bool multicap: a directive to make consecutive upper-case characters</span>
+<span class="sd">                          one word (only one initial underscore) until an upper</span>
+<span class="sd">                          followed by lower is encountered</span>
+<span class="sd">    :rtype: `str`</span>
+<span class="sd">    :raises TypeError: if *value* is not a string</span>
+<span class="sd">    :raises ValueError: if *validate* is true and *value* fails validation</span>
+
+<span class="sd">    This converts upper-case characters to lower-case preceded by an underscore</span>
+<span class="sd">    unless it is the first character.</span>
+
+<span class="sd">    *multicap* example:</span>
+
+<span class="sd">    &gt;&gt;&gt; underscore(&#39;ABCDefGHijKLMNOPqrs&#39;)  # multicap=True is default</span>
+<span class="sd">    &#39;abc_def_g_hij_klmno_pqrs&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; underscore(&#39;ABCDefGHijKLMNOPqrs&#39;, multicap=False)</span>
+<span class="sd">    &#39;a_b_c_def_g_hij_k_l_m_n_o_pqrs&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+        <span class="n">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{!r} is not a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;[A-Z]&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">multicap</span><span class="p">:</span>
+        <span class="n">patterns</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;[A-Z]+(?=($|[A-Z][a-z]))&#39;</span><span class="p">)</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">x</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">value</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">result_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">result_type</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result_type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+</div>
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="valid_python_identifier"><a class="viewcode-back" href="../../module/util.html#pyneric.util.valid_python_identifier">[docs]</a><span class="k">def</span> <span class="nf">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dotted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Validate that the given string value is a valid Python identifier.</span>
+
+<span class="sd">    :param str value: the identifier to validate</span>
+<span class="sd">    :param bool dotted: if true, then each string around any dots is validated</span>
+<span class="sd">    :param exception: whether to raise an exception (see raises)</span>
+<span class="sd">    :type exception: `bool` or `BaseException`</span>
+<span class="sd">    :returns: whether *value* is a valid non-keyword Python identifier</span>
+<span class="sd">    :rtype: `bool`</span>
+<span class="sd">    :raises *exception*: if it is an exception class and validation fails</span>
+<span class="sd">    :raises ValueError: if *exception* is true and validation fails</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{!r} is not a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">dotted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">valid_python_identifier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="n">exception</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">))</span>
+    <span class="n">problem</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">future</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dotted</span><span class="o">=</span><span class="n">dotted</span><span class="p">):</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="s">&quot;is not a valid Python identifier&quot;</span>
+    <span class="k">elif</span> <span class="n">keyword</span><span class="o">.</span><span class="n">iskeyword</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="s">&quot;is a Python keyword&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">problem</span> <span class="ow">and</span> <span class="n">exception</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">problem</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="nb">issubclass</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)):</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="ne">ValueError</span>
+    <span class="k">raise</span> <span class="n">exception</span><span class="p">(</span><span class="s">&quot;{!r} {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">problem</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">pyneric 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

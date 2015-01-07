@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.meta &mdash; pyneric 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="API" href="../api.html" />
+    <link rel="next" title="pyneric.rest_requests" href="rest_requests.html" />
+    <link rel="prev" title="pyneric.fsnotify" href="fsnotify.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rest_requests.html" title="pyneric.rest_requests"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fsnotify.html" title="pyneric.fsnotify"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyneric 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pyneric.meta">
+<span id="pyneric-meta"></span><h1>pyneric.meta<a class="headerlink" href="#module-pyneric.meta" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-pyneric.meta" title="pyneric.meta"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.meta</span></tt></a> module contains helpers for metaclassing.</p>
+<dl class="class">
+<dt id="pyneric.meta.MetadataBehaviour">
+<em class="property">class </em><tt class="descclassname">pyneric.meta.</tt><tt class="descname">MetadataBehaviour</tt><big>(</big><em>metadata_attr='__metadata__'</em>, <em>propagate_attr='__propagate__'</em>, <em>base_override_attr='__base_overrides__'</em>, <em>validate_prefix='validate_'</em>, <em>storage_attr='__metadata__'</em>, <em>storage_class=&lt;class 'dict'&gt;</em>, <em>metadata_getter='_get_metadata'</em><big>)</big><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>The behaviour of a <a class="reference internal" href="#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><tt class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></tt></a>.</p>
+<p>This behaviour defines how the metadata in a <a class="reference internal" href="#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><tt class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></tt></a> is defined and
+managed.  The default behaviour should work for most needs unless there are
+conflicting attributes or methods.  Another reason to use non-default
+behaviour would be to apply <a class="reference internal" href="#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><tt class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></tt></a> to an existing metadata management
+paradigm.</p>
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.metadata_attr">
+<tt class="descname">metadata_attr</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.metadata_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.metadata_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of a class attribute that may contain metadata.</p>
+<p>The attribute may be a sequence of attribute names or a mapping of
+metadata values keyed by attribute name.  The attribute names become
+identifiers of user metadata, as opposed to internally managed metadata
+such as <a class="reference internal" href="#pyneric.meta.MetadataBehaviour.propagate_attr" title="pyneric.meta.MetadataBehaviour.propagate_attr"><tt class="xref py py-attr docutils literal"><span class="pre">propagate_attr</span></tt></a> and <a class="reference internal" href="#pyneric.meta.MetadataBehaviour.storage_attr" title="pyneric.meta.MetadataBehaviour.storage_attr"><tt class="xref py py-attr docutils literal"><span class="pre">storage_attr</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.propagate_attr">
+<tt class="descname">propagate_attr</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.propagate_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.propagate_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The attribute name that contains the propagated attribute names.</p>
+<p>This is the name of an internally-managed metadata attribute that can
+be used to specify which user metadata attributes are also accessible
+from an instance of the metaclass.</p>
+<p>If this is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>, then no propagation occurs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.base_override_attr">
+<tt class="descname">base_override_attr</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.base_override_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.base_override_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The attribute name that contains a mapping of overridden values.</p>
+<p>This is the name of an internally-managed metadata attribute that can
+be used to specify user metadata values that should override values
+obtained from base metaclasses.  If the metadata value is specified
+directly in the derived metaclass, then this has no effect.</p>
+<p>If this is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>, then no metadata from bases are overridden.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.storage_attr">
+<tt class="descname">storage_attr</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.storage_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.storage_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the attribute in which metadata is stored.</p>
+<p>This is the name of a metadata behaviour attribute that is used to
+store the metadata in the metaclass.</p>
+<p>This value is required because the metadata must be stored and accessed
+from somewhere.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.storage_class">
+<tt class="descname">storage_class</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.storage_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.storage_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class used to contain metadata.</p>
+<p>The class specified must be able to accept user metadata arguments via
+its constructor and provide access to metadata values.  If this is not
+a <tt class="xref py py-obj docutils literal"><span class="pre">Mapping</span></tt>, then the metadata values must be accessible
+as attributes.</p>
+<p>This value is required because the metadata must be stored and accessed
+somehow.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.metadata_getter">
+<tt class="descname">metadata_getter</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.metadata_getter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.metadata_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the class method used to retrieve metadata values.</p>
+<p>This applies to both <a class="reference internal" href="#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><tt class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></tt></a> instances and classes built with them.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.meta.MetadataBehaviour.storage_is_mapping">
+<tt class="descname">storage_is_mapping</tt><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.storage_is_mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.storage_is_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the <a class="reference internal" href="#pyneric.meta.MetadataBehaviour.storage_class" title="pyneric.meta.MetadataBehaviour.storage_class"><tt class="xref py py-obj docutils literal"><span class="pre">storage_class</span></tt></a> is a <tt class="xref py py-obj docutils literal"><span class="pre">Mapping</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyneric.meta.MetadataBehaviour.define_property_if_not_descriptor">
+<tt class="descname">define_property_if_not_descriptor</tt><big>(</big><em>dict</em>, <em>attr</em><big>)</big><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.define_property_if_not_descriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.define_property_if_not_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a property in <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> if it is not already a data descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dict</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.4)"><em>dict</em></a>) &#8211; The mapping in which to define the property.</li>
+<li><strong>attr</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><em>str</em></a>) &#8211; The key in the mapping to which to set the property.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyneric.meta.MetadataBehaviour.get_behavioural_data">
+<tt class="descname">get_behavioural_data</tt><big>(</big><em>cls</em><big>)</big><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.get_behavioural_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.get_behavioural_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a three-tuple containing a class&#8217;s behavioural data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cls</strong> &#8211; The class from which to get the behavioural data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Three-tuple whose elements are metadata, propagated
+attributes, and base-override attributes.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyneric.meta.MetadataBehaviour.get_class_metadata">
+<tt class="descname">get_class_metadata</tt><big>(</big><em>cls</em>, <em>bases</em>, <em>dict</em><big>)</big><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.get_class_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.get_class_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the metadata defined in a class definition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cls</strong> (<em>class</em>) &#8211; The class being defined.</li>
+<li><strong>bases</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.4)"><em>tuple</em></a>) &#8211; The base classes from the class definition.</li>
+<li><strong>dict</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.4)"><em>dict</em></a>) &#8211; The attribute dictionary from the class definition.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">All (user and internally-managed) metadata from the class
+(including those inherited from applicable base metaclasses)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyneric.meta.MetadataBehaviour.get_metadata">
+<tt class="descname">get_metadata</tt><big>(</big><em>cls</em>, <em>attr=None</em><big>)</big><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.get_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return metadata from the given class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cls</strong> (<em>class</em>) &#8211; The class from which to retrieve metadata.</li>
+<li><strong>attr</strong> (<em>str or None</em>) &#8211; The attribute identifying which metadata to return.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A shallow copy of all metadata if <tt class="xref py py-obj docutils literal"><span class="pre">attr</span></tt> is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>;
+otherwise, the metadata value identified by <tt class="xref py py-obj docutils literal"><span class="pre">attr</span></tt>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyneric.meta.MetadataBehaviour.prepare_new">
+<tt class="descname">prepare_new</tt><big>(</big><em>cls</em>, <em>bases</em>, <em>dict</em><big>)</big><a class="reference internal" href="../_modules/pyneric/meta.html#MetadataBehaviour.prepare_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.MetadataBehaviour.prepare_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> prior to calling <tt class="xref py py-meth docutils literal"><span class="pre">__new__()</span></tt>.</p>
+<p>This sets values in <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> that must be set during class creation to
+manage the metadata properly.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyneric.meta.Metaclass">
+<em class="property">class </em><tt class="descclassname">pyneric.meta.</tt><tt class="descname">Metaclass</tt><a class="reference internal" href="../_modules/pyneric/meta.html#Metaclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.meta.Metaclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.type</span></tt></p>
+<p>A metaclass for managing metadata.</p>
+<p>Metadata management can be customized by specifying a different
+<a class="reference internal" href="#pyneric.meta.MetadataBehaviour" title="pyneric.meta.MetadataBehaviour"><tt class="xref py py-obj docutils literal"><span class="pre">MetadataBehaviour</span></tt></a> instance in the <tt class="xref py py-obj docutils literal"><span class="pre">__metadata_behaviour__</span></tt> attribute.</p>
+<p>The following applies when default metadata behaviour is used.  Metadata
+may be defined with in the <tt class="xref py py-attr docutils literal"><span class="pre">__metadata__</span></tt> attribute in the metaclass
+definition, which may be an iterable of attribute names or a mapping of
+values keys by attribute name.  These defined metadata attributes can be
+set via attributes in the class definition and accessed via class
+attributes.  Metadata may be propagated (as properties) to instances by
+specifying their attribute names in the <tt class="xref py py-attr docutils literal"><span class="pre">__propagate__</span></tt> attribute
+when access to metadata from the class&#8217;s instances is desired.  The
+<tt class="xref py py-attr docutils literal"><span class="pre">__base_overrides__</span></tt> attribute may be set to a mapping of metadata
+values keyed by attribute name to automatically set those metadata values
+in derived metaclasses when it has not defined the metadata value itself.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fsnotify.html"
+                        title="previous chapter">pyneric.fsnotify</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rest_requests.html"
+                        title="next chapter">pyneric.rest_requests</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/module/meta.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rest_requests.html" title="pyneric.rest_requests"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fsnotify.html" title="pyneric.fsnotify"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyneric 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.future &mdash; pyneric 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="API" href="../api.html" />
+    <link rel="next" title="pyneric.util" href="util.html" />
+    <link rel="prev" title="pyneric" href="pyneric.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="util.html" title="pyneric.util"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyneric.html" title="pyneric"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyneric 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pyneric.future">
+<span id="pyneric-future"></span><h1>pyneric.future<a class="headerlink" href="#module-pyneric.future" title="Permalink to this headline">¶</a></h1>
+<p>pyneric.future module</p>
+<p>This is equivalent to future.builtins with additions and customizations.</p>
+<dl class="function">
+<dt id="pyneric.future.python_2_unicode_compatible">
+<tt class="descclassname">pyneric.future.</tt><tt class="descname">python_2_unicode_compatible</tt><big>(</big><em>cls</em><big>)</big><a class="reference internal" href="../_modules/pyneric/future.html#python_2_unicode_compatible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.future.python_2_unicode_compatible" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator that defines __unicode__ and __str__ methods under Python
+2. Under Python 3 it does nothing.</p>
+<p>To support Python 2 and 3 with a single code base, define a __str__
+method returning unicode text and apply this decorator to the class.</p>
+<p>The implementation comes from django.utils.encoding.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyneric.future.basestring">
+<em class="property">class </em><tt class="descclassname">pyneric.future.</tt><tt class="descname">basestring</tt><a class="headerlink" href="#pyneric.future.basestring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>A minimal backport of the Python 2 basestring type to Py3</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyneric.html"
+                        title="previous chapter">pyneric</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="util.html"
+                        title="next chapter">pyneric.util</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/module/future.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="util.html" title="pyneric.util"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyneric.html" title="pyneric"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyneric 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
