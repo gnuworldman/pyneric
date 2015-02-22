@@ -252,6 +252,33 @@ class MetaclassCustomBehaviourTestCase(TestCase):
         class C2(C):
             a = {'set', 'not', 'a', 'dict'}
 
+    def test_validation_with_transformation(self):
+        behaviour = pyneric.MetadataBehaviour(validate_transforms=True)
+        a_value = dict()
+        class CustomException(Exception):
+            """Exception for validation test"""
+        class M(pyneric.Metaclass):
+            __metadata_behaviour__ = behaviour
+            __metadata__ = dict(a=a_value)
+            @staticmethod
+            def validate_a(value):
+                if not isinstance(value, dict):
+                    raise CustomException("must be a dict")
+                return list(value)
+        class C(with_metaclass(M, object)):
+            a = {'valid': 'dict'}
+        self.assertEqual(['valid'], C.a)
+        # still also raises exception when appropriate
+        self.assertRaises(CustomException, type, 'C',
+                          (with_metaclass(M, object),),
+                          dict(a={'invalid', 'set', 'not', 'a', 'dict'}))
+        self.assertRaises(CustomException, type, 'C1', (C,),
+                          dict(a={'invalid', 'set', 'not', 'a', 'dict'}))
+        class C1(C):
+            a = {'another': 4, 'one': 1, 'transformed': 0}
+        self.assertIsInstance(C1.a, list)
+        self.assertEqual({'another', 'one', 'transformed'}, set(C1.a))
+
     def test_metadata_behaviour_similar_to_django_model(self):
         class CustomMetadataBehaviour(pyneric.MetadataBehaviour):
             def __init__(self, storage_class, metadata_attr='Meta',

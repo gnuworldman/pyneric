@@ -38,7 +38,8 @@ class MetadataBehaviour(object):
                  validate_prefix='validate_',
                  storage_attr='__metadata__',
                  storage_class=dict,
-                 metadata_getter='_get_metadata'):
+                 metadata_getter='_get_metadata',
+                 validate_transforms=False):
         # Validate arguments so that issues are caught early.
         attr_dict = dict(metadata_attr=metadata_attr,
                          propagate_attr=propagate_attr,
@@ -64,6 +65,7 @@ class MetadataBehaviour(object):
         self._storage_attr = storage_attr
         self._storage_class = storage_class
         self._metadata_getter = metadata_getter
+        self._validate_transforms = validate_transforms
 
     @property
     def metadata_attr(self):
@@ -284,7 +286,9 @@ class MetadataBehaviour(object):
                     continue
                 if not callable(validate):
                     continue
-                validate(value)
+                new_value = validate(value)
+                if self._validate_transforms and new_value != value:
+                    metadata[attr] = new_value
         if self._propagate_attr:
             for attr in metadata[self._propagate_attr]:
                 self.define_property_if_not_descriptor(dict, attr)
