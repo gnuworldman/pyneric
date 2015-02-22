@@ -12,8 +12,6 @@ import inspect
 import functools
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
-import requests
-
 from pyneric.meta import Metaclass
 from pyneric.util import tryf
 from pyneric import util
@@ -202,14 +200,19 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
 
     def __getattr__(self, item):
         try:
-            func = getattr(requests, item)
-        except AttributeError:
+            import requests
+        except ImportError:
             pass
         else:
-            if (inspect.isfunction(func) and
-                'url' in (inspect.getargspec(func).args if future.PY2 else
-                          inspect.signature(func).parameters)):
-                return functools.partial(func, url=self.url)
+            try:
+                func = getattr(requests, item)
+            except AttributeError:
+                pass
+            else:
+                if (inspect.isfunction(func) and
+                    'url' in (inspect.getargspec(func).args if future.PY2 else
+                              inspect.signature(func).parameters)):
+                    return functools.partial(func, url=self.url)
         util.raise_attribute_error(self, item)
 
     @property

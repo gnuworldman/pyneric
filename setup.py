@@ -39,6 +39,7 @@ setup(
               'pyneric.future',
               ],
     install_requires=['future'],
-    extras_require={'FileSystemNotifier': ['pyinotify>=0.9'],
+    extras_require={'fsnotify': ['pyinotify>=0.9'],
+                    'requests': ['requests'],
                     },
     )
