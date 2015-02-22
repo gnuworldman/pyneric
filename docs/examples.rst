@@ -32,6 +32,27 @@ titled-terms to lower/underscore (underscore function)
 >>> pyneric.underscore('BasicPythonIdentifier')
 'basic_python_identifier'
 
+Get a function name from the stack
+----------------------------------
+
+the current function name
+^^^^^^^^^^^^^^^^^^^^^^^^^
+>>> def foo():
+...     return pyneric.get_function_name()
+...
+>>> foo()
+'foo'
+
+also further back in the stack
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>> def foo():
+...     def bar():
+...         return pyneric.get_function_name(1) + pyneric.get_function_name()
+...     return bar()
+...
+>>> foo()
+'foobar'
+
 Return upon exception (tryf function)
 -------------------------------------
 
