@@ -1,6 +1,15 @@
 Release Notes
 =============
 
+Version 1.1.1
+-------------
+
+`~pyneric.meta.MetadataBehaviour` now takes a `validate_transforms` argument
+that (if set to true) will make validation methods (those that match the
+concatenation of `validate_prefix` and a metadata field name) also transform
+the metadata value; that is, whatever the method returns is what the value
+becomes.
+
 Version 1.1
 -----------
 

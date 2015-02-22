@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.meta &mdash; pyneric 1.1.0 documentation</title>
+    <title>pyneric.meta &mdash; pyneric 1.1.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.0',
+        VERSION:     '1.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.1.0 documentation" href="../../index.html" />
+    <link rel="top" title="pyneric 1.1.1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.1.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -87,7 +87,8 @@
                  <span class="n">validate_prefix</span><span class="o">=</span><span class="s">&#39;validate_&#39;</span><span class="p">,</span>
                  <span class="n">storage_attr</span><span class="o">=</span><span class="s">&#39;__metadata__&#39;</span><span class="p">,</span>
                  <span class="n">storage_class</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span>
-                 <span class="n">metadata_getter</span><span class="o">=</span><span class="s">&#39;_get_metadata&#39;</span><span class="p">):</span>
+                 <span class="n">metadata_getter</span><span class="o">=</span><span class="s">&#39;_get_metadata&#39;</span><span class="p">,</span>
+                 <span class="n">validate_transforms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="c"># Validate arguments so that issues are caught early.</span>
         <span class="n">attr_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">metadata_attr</span><span class="o">=</span><span class="n">metadata_attr</span><span class="p">,</span>
                          <span class="n">propagate_attr</span><span class="o">=</span><span class="n">propagate_attr</span><span class="p">,</span>
@@ -113,6 +114,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_storage_attr</span> <span class="o">=</span> <span class="n">storage_attr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_storage_class</span> <span class="o">=</span> <span class="n">storage_class</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_getter</span> <span class="o">=</span> <span class="n">metadata_getter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_transforms</span> <span class="o">=</span> <span class="n">validate_transforms</span>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="MetadataBehaviour.metadata_attr"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.metadata_attr">[docs]</a>    <span class="k">def</span> <span class="nf">metadata_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -333,7 +335,9 @@
                     <span class="k">continue</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">validate</span><span class="p">):</span>
                     <span class="k">continue</span>
-                <span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_transforms</span> <span class="ow">and</span> <span class="n">new_value</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">metadata</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_propagate_attr</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_propagate_attr</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">define_property_if_not_descriptor</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
@@ -431,7 +435,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.1.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
