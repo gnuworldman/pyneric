@@ -201,7 +201,7 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
     def __getattr__(self, item):
         try:
             import requests
-        except ImportError:
+        except ImportError:  # pragma: no cover
             pass
         else:
             try:
