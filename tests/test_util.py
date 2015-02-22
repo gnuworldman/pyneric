@@ -92,6 +92,26 @@ class GetFromDictOrObjectsTestCase(TestCase):
                           self.objects)
 
 
+class GetFunctionNameTestCase(TestCase):
+
+    func = staticmethod(pyneric.get_function_name)
+
+    def test_default(self):
+        self.assertEqual('test_default', self.func())
+        self.assertEqual('test_default', self.func(0))
+
+    def test_deeper(self):
+        def inner():
+            def deeper_still():
+                self.assertEqual('deeper_still', self.func())
+                self.assertEqual('inner', self.func(1))
+                self.assertEqual('test_deeper', self.func(2))
+            self.assertEqual('test_deeper', self.func(1))
+            self.assertEqual('inner', self.func())
+            deeper_still()
+        inner()
+
+
 class ModuleAttributesTestCase(TestCase):
 
     func = staticmethod(pyneric.module_attributes)

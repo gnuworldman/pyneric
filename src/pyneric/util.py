@@ -79,6 +79,21 @@ def get_from_dict_or_objects(name, dict, objects, pop_from_dict=False):
 
 
 @add_to_all
+def get_function_name(back=0):
+    """Return the name of a function in the stack.
+
+    By default (no arguments) the name of the caller of this function is
+    returned, but the name of a function further back in the stack can be
+    returned by specifying a positive integer indicating how many frames.
+
+    :param int back: the number of frames beyond the caller to go back
+    :raises IndexError: if `back` is too high for the stack
+
+    """
+    return inspect.stack()[1 + back][3]
+
+
+@add_to_all
 def module_attributes(module, use_all=None, include_underscored=False):
     """Return a set of the attribute names in the given module.
 
