@@ -1,6 +1,23 @@
 Release Notes
 =============
 
+Version 1.1
+-----------
+
+The get_function_name utility function is new.
+
+Optional (extra) requirements "pyinotify" and "requests" are now truly
+optional; details are below.
+
+`FileSystemNotifier` is no longer imported into the base package because it has
+a requirement that is optional/extra for the library.  The name for the extra
+feature has been changed from "FileSystemNotifier" to "fsnotify".
+
+The "requests" extra feature name is new, and a project should require it if it
+intends to make HTTP requests from the REST classes in pyneric.rest_requests.
+Those REST classes are also now usable without the "requests" package
+requirement (if not calling HTTP request methods, of course).
+
 Version 1.0
 -----------
 
