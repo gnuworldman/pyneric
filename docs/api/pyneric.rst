@@ -1,0 +1,4 @@
+pyneric
+=======
+
+.. automodule:: pyneric

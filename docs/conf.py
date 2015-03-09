@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyneric'
-copyright = '2014, Craig Hurd-Rindy'
+copyright = '2014-2015, Craig Hurd-Rindy'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -279,7 +279,7 @@ texinfo_documents = [
 epub_title = 'pyneric'
 epub_author = 'Craig Hurd-Rindy'
 epub_publisher = 'Craig Hurd-Rindy'
-epub_copyright = '2014, Craig Hurd-Rindy'
+epub_copyright = '2014-2015, Craig Hurd-Rindy'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = 'pyneric'
@@ -343,8 +343,23 @@ epub_exclude_files = ['search.html']
 #epub_use_index = True
 
 
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'python': ('http://docs.python.org/{}'.format(sys.version_info[0]), None)}
+intersphinx_mapping = {
+    'python': (
+        'http://docs.python.org/{}'.format(sys.version_info[0]),
+        None
+    ),
+}
+
+try:
+    import django
+except ImportError:
+    pass
+else:
+    _django_major_version = '{}.{}'.format(*django.VERSION[:2])
+    intersphinx_mapping['django'] = (
+        'http://docs.djangoproject.com/en/{}/'.format(_django_major_version),
+        'http://docs.djangoproject.com/en/{}/_objects/'.format(_django_major_version)
+    )
 
 
 # autodoc configuration

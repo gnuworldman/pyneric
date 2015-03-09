@@ -9,11 +9,12 @@ flake:
 	flake8 src
 
 test: flake
-	PYTHONPATH=src:tests coverage run --branch --module unittest discover
+	PYTHONPATH=src:tests coverage run --branch --module unittest discover --pattern 'test_*.py'
+	PYTHONPATH=src:tests coverage run --append --branch tests/django_test_app/manage.py test django_test_app --noinput
 	PYTHONPATH=src python -m doctest docs/examples.rst
 
 coverage: test
-	coverage report -m
+	coverage report --show-missing --fail-under=100
 
 coverage_html: test
 	coverage html
