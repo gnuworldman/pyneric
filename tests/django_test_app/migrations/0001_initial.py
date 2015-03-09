@@ -11,6 +11,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+        ),
         migrations.CreateModel(
             name='AutoPgUuidFkTest',
             fields=[
