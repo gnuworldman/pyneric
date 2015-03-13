@@ -3,9 +3,10 @@ API
 
 .. toctree::
 
-   module/pyneric
-   module/future
-   module/util
-   module/fsnotify
-   module/meta
-   module/rest_requests
+   api/pyneric
+   api/future
+   api/util
+   api/fsnotify
+   api/meta
+   api/rest_requests
+   api/django

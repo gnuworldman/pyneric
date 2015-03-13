@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.future &mdash; pyneric 1.1.1 documentation</title>
+    <title>pyneric &mdash; pyneric 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.1',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,10 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.1.1 documentation" href="../index.html" />
+    <link rel="top" title="pyneric 1.2.0 documentation" href="../index.html" />
     <link rel="up" title="API" href="../api.html" />
-    <link rel="next" title="pyneric.util" href="util.html" />
-    <link rel="prev" title="pyneric" href="pyneric.html" /> 
+    <link rel="next" title="pyneric.future" href="future.html" />
+    <link rel="prev" title="API" href="../api.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,12 +39,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="util.html" title="pyneric.util"
+          <a href="future.html" title="pyneric.future"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyneric.html" title="pyneric"
+          <a href="../api.html" title="API"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
           <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
       </ul>
     </div>  
@@ -54,27 +54,22 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-pyneric.future">
-<span id="pyneric-future"></span><h1>pyneric.future<a class="headerlink" href="#module-pyneric.future" title="Permalink to this headline">¶</a></h1>
-<p>pyneric.future module</p>
-<p>This is equivalent to future.builtins with additions and customizations.</p>
-<dl class="function">
-<dt id="pyneric.future.python_2_unicode_compatible">
-<tt class="descclassname">pyneric.future.</tt><tt class="descname">python_2_unicode_compatible</tt><big>(</big><em>cls</em><big>)</big><a class="reference internal" href="../_modules/pyneric/future.html#python_2_unicode_compatible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.future.python_2_unicode_compatible" title="Permalink to this definition">¶</a></dt>
-<dd><p>A decorator that defines __unicode__ and __str__ methods under Python
-2. Under Python 3 it does nothing.</p>
-<p>To support Python 2 and 3 with a single code base, define a __str__
-method returning unicode text and apply this decorator to the class.</p>
-<p>The implementation comes from django.utils.encoding.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="pyneric.future.basestring">
-<em class="property">class </em><tt class="descclassname">pyneric.future.</tt><tt class="descname">basestring</tt><a class="headerlink" href="#pyneric.future.basestring" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
-<p>A minimal backport of the Python 2 basestring type to Py3</p>
-</dd></dl>
-
+  <div class="section" id="module-pyneric">
+<span id="pyneric"></span><h1>pyneric<a class="headerlink" href="#module-pyneric" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-pyneric" title="pyneric"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric</span></tt></a> package contains Python helpers and utility functions.</p>
+<p>For convenience, many of the library&#8217;s components are imported by the
+pyneric package&#8217;s __init__ module so that they may be accessed directly under
+pyneric, such as:</p>
+<ul class="simple">
+<li><a class="reference internal" href="meta.html#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><tt class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></tt></a></li>
+<li><a class="reference internal" href="rest_requests.html#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><tt class="xref py py-obj docutils literal"><span class="pre">RestResource</span></tt></a></li>
+<li><a class="reference internal" href="util.html#pyneric.util.tryf" title="pyneric.util.tryf"><tt class="xref py py-obj docutils literal"><span class="pre">tryf</span></tt></a></li>
+</ul>
+<p>Components (in modules/subpackages) that require extra dependencies should not
+be imported here.  For example <a class="reference internal" href="fsnotify.html#module-pyneric.fsnotify" title="pyneric.fsnotify"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.fsnotify</span></tt></a> depends on <tt class="xref py py-obj docutils literal"><span class="pre">pyinotify</span></tt>, so
+<a class="reference internal" href="fsnotify.html#pyneric.fsnotify.FileSystemNotifier" title="pyneric.fsnotify.FileSystemNotifier"><tt class="xref py py-obj docutils literal"><span class="pre">FileSystemNotifier</span></tt></a> must be imported from that module. If it
+was imported here, then the library would need to unconditionally require
+<tt class="xref py py-obj docutils literal"><span class="pre">pyinotify</span></tt>, which is not desired.</p>
 </div>
 
 
@@ -84,14 +79,14 @@ method returning unicode text and apply this decorator to the class.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyneric.html"
-                        title="previous chapter">pyneric</a></p>
+  <p class="topless"><a href="../api.html"
+                        title="previous chapter">API</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="util.html"
-                        title="next chapter">pyneric.util</a></p>
+  <p class="topless"><a href="future.html"
+                        title="next chapter">pyneric.future</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/module/future.txt"
+    <li><a href="../_sources/api/pyneric.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -121,17 +116,17 @@ method returning unicode text and apply this decorator to the class.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="util.html" title="pyneric.util"
+          <a href="future.html" title="pyneric.future"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyneric.html" title="pyneric"
+          <a href="../api.html" title="API"
              >previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
           <li><a href="../api.html" >API</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2014, Craig Hurd-Rindy.
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>

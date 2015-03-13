@@ -1,6 +1,15 @@
 Release Notes
 =============
 
+Version 1.2
+-----------
+
+`pyneric.django.db.models.fields.pguuid.AutoPgUuidField` is new and is the
+first Django extension in the library.  It is an optional feature, which can be
+made a requirement in a project by specifying "pyneric[django-pguuid]" as a
+requirement.  See the documentation for more details and `django_test_app`
+under the `tests` directory for an example.
+
 Version 1.1.1
 -------------
 

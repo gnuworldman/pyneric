@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.django &mdash; pyneric 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.2.0 documentation" href="../index.html" />
+    <link rel="up" title="API" href="../api.html" />
+    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="prev" title="pyneric.rest_requests" href="rest_requests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rest_requests.html" title="pyneric.rest_requests"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyneric-django">
+<h1>pyneric.django<a class="headerlink" href="#pyneric-django" title="Permalink to this headline">¶</a></h1>
+<p>This package contains <a class="reference external" href="https://www.djangoproject.com/">Django</a> extensions in
+a package structure similar to Django&#8217;s.</p>
+<div class="section" id="module-pyneric.django.db.models.fields.pguuid">
+<span id="db-models-fields-pguuid"></span><h2>db.models.fields.pguuid<a class="headerlink" href="#module-pyneric.django.db.models.fields.pguuid" title="Permalink to this headline">¶</a></h2>
+<p>UUID Django <a class="reference external" href="http://docs.djangoproject.com/en/1.7/ref/models/fields/#module-django.db.models.fields" title="(in Django v1.7)"><tt class="xref py py-obj docutils literal"><span class="pre">fields</span></tt></a> for
+<a class="reference external" href="http://www.postgresql.org/">PostgreSQL</a> backends.</p>
+<p>Loading this module patches <a class="reference external" href="http://docs.djangoproject.com/en/1.7/ref/models/fields/#django.db.models.ForeignKey" title="(in Django v1.7)"><tt class="xref py py-obj docutils literal"><span class="pre">ForeignKey</span></tt></a> so that it
+can refer to an <a class="reference internal" href="#pyneric.django.db.models.fields.pguuid.AutoPgUuidField" title="pyneric.django.db.models.fields.pguuid.AutoPgUuidField"><tt class="xref py py-obj docutils literal"><span class="pre">AutoPgUuidField</span></tt></a> without assuming that it is an
+<a class="reference external" href="http://docs.djangoproject.com/en/1.7/ref/models/fields/#django.db.models.IntegerField" title="(in Django v1.7)"><tt class="xref py py-obj docutils literal"><span class="pre">IntegerField</span></tt></a>.</p>
+<dl class="class">
+<dt id="pyneric.django.db.models.fields.pguuid.AutoPgUuidField">
+<em class="property">class </em><tt class="descclassname">pyneric.django.db.models.fields.pguuid.</tt><tt class="descname">AutoPgUuidField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pyneric/django/db/models/fields/pguuid.html#AutoPgUuidField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.django.db.models.fields.pguuid.AutoPgUuidField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django_extensions.db.fields.PostgreSQLUUIDField</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">django.db.models.fields.AutoField</span></tt></p>
+<p>A <tt class="xref py py-obj docutils literal"><span class="pre">PostgreSQLUUIDField</span></tt> that is also an
+<a class="reference external" href="http://docs.djangoproject.com/en/1.7/ref/models/fields/#django.db.models.AutoField" title="(in Django v1.7)"><tt class="xref py py-obj docutils literal"><span class="pre">AutoField</span></tt></a>.</p>
+<p>The generation of the UUID value in the database must be set up manually
+(via a migration or another mechanism).  Django 1.7 migration example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">migrations</span><span class="o">.</span><span class="n">RunSQL</span><span class="p">(</span>
+    <span class="s">&quot;ALTER TABLE autopguuid ALTER uuid_field&quot;</span>
+    <span class="s">&quot; SET DEFAULT uuid_generate_v4();&quot;</span><span class="p">,</span>
+    <span class="s">&quot;ALTER TABLE autopguuid ALTER uuid_field DROP DEFAULT;&quot;</span>
+<span class="p">),</span>
+</pre></div>
+</div>
+<p>Setting the database default automatically may be added in a future
+version.</p>
+<dl class="method">
+<dt id="pyneric.django.db.models.fields.pguuid.AutoPgUuidField.get_prep_value">
+<tt class="descname">get_prep_value</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/pyneric/django/db/models/fields/pguuid.html#AutoPgUuidField.get_prep_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.django.db.models.fields.pguuid.AutoPgUuidField.get_prep_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override to bypass <a class="reference external" href="http://docs.djangoproject.com/en/1.7/ref/models/fields/#django.db.models.AutoField" title="(in Django v1.7)"><tt class="xref py py-obj docutils literal"><span class="pre">AutoField</span></tt></a>&#8216;s integer
+value assumption.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyneric.django</a><ul>
+<li><a class="reference internal" href="#module-pyneric.django.db.models.fields.pguuid">db.models.fields.pguuid</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rest_requests.html"
+                        title="previous chapter">pyneric.rest_requests</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../examples.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/django.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rest_requests.html" title="pyneric.rest_requests"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

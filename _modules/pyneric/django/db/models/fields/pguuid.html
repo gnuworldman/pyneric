@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.django.db.models.fields.pguuid &mdash; pyneric 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.2.0 documentation" href="../../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+          <li><a href="../../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pyneric.django.db.models.fields.pguuid</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;UUID Django `~django:django.db.models.fields` for</span>
+<span class="sd">`PostgreSQL &lt;http://www.postgresql.org/&gt;`_ backends.</span>
+
+<span class="sd">Loading this module patches `~django:django.db.models.ForeignKey` so that it</span>
+<span class="sd">can refer to an `AutoPgUuidField` without assuming that it is an</span>
+<span class="sd">`~django:django.db.models.IntegerField`.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># Support Python 2 &amp; 3.</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+                        <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyneric.future</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="kn">from</span> <span class="nn">django.db.models.fields</span> <span class="kn">import</span> <span class="n">AutoField</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">django.db.models.fields.related</span> <span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span> <span class="nn">django_extensions.db.fields</span> <span class="kn">import</span> <span class="n">PostgreSQLUUIDField</span>
+
+<span class="kn">from</span> <span class="nn">pyneric.util</span> <span class="kn">import</span> <span class="n">add_to_all</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="c"># Monkey patch ForeignKey.db_type to fix the assumption that an AutoField is an</span>
+<span class="c"># IntegerField.</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ForeignKey</span><span class="o">.</span><span class="n">db_type</span><span class="p">,</span>
+           <span class="s">&#39;_pyneric_autopguuidfield_patch&#39;</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">_foreign_key_db_type_original</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="o">.</span><span class="n">db_type</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">ForeignKey</span><span class="o">.</span><span class="n">db_type</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_foreign_key_db_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
+        <span class="n">rel_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">related_field</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rel_field</span><span class="p">,</span> <span class="n">AutoPgUuidField</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">rel_field</span><span class="o">.</span><span class="n">db_type</span><span class="p">(</span><span class="n">connection</span><span class="o">=</span><span class="n">connection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_foreign_key_db_type_original</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
+    <span class="n">_foreign_key_db_type</span><span class="o">.</span><span class="n">_pyneric_autopguuidfield_patch</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">ForeignKey</span><span class="o">.</span><span class="n">db_type</span> <span class="o">=</span> <span class="n">_foreign_key_db_type</span>
+
+
+<span class="nd">@add_to_all</span>
+<div class="viewcode-block" id="AutoPgUuidField"><a class="viewcode-back" href="../../../../../../api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField">[docs]</a><span class="k">class</span> <span class="nc">AutoPgUuidField</span><span class="p">(</span><span class="n">PostgreSQLUUIDField</span><span class="p">,</span> <span class="n">AutoField</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;A `PostgreSQLUUIDField` that is also an</span>
+<span class="sd">    `~django:django.db.models.AutoField`.</span>
+
+<span class="sd">    The generation of the UUID value in the database must be set up manually</span>
+<span class="sd">    (via a migration or another mechanism).  Django 1.7 migration example::</span>
+
+<span class="sd">        migrations.RunSQL(</span>
+<span class="sd">            &quot;ALTER TABLE autopguuid ALTER uuid_field&quot;</span>
+<span class="sd">            &quot; SET DEFAULT uuid_generate_v4();&quot;,</span>
+<span class="sd">            &quot;ALTER TABLE autopguuid ALTER uuid_field DROP DEFAULT;&quot;</span>
+<span class="sd">        ),</span>
+
+<span class="sd">    Setting the database default automatically may be added in a future</span>
+<span class="sd">    version.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AutoPgUuidField.get_prep_value"><a class="viewcode-back" href="../../../../../../api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField.get_prep_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Override to bypass `~django:django.db.models.AutoField`\&#39;s integer</span>
+<span class="sd">        value assumption.&quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">Field</span><span class="o">.</span><span class="n">get_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+          <li><a href="../../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

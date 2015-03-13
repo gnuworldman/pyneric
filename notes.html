@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Release Notes &mdash; pyneric 1.1.1 documentation</title>
+    <title>Release Notes &mdash; pyneric 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.1.1',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.1.1 documentation" href="index.html" />
+    <link rel="top" title="pyneric 1.2.0 documentation" href="index.html" />
     <link rel="prev" title="Examples" href="examples.html" /> 
   </head>
   <body>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="examples.html" title="Examples"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">pyneric 1.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">pyneric 1.2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,9 +50,17 @@
             
   <div class="section" id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-2">
+<h2>Version 1.2<a class="headerlink" href="#version-1-2" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField" title="pyneric.django.db.models.fields.pguuid.AutoPgUuidField"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.django.db.models.fields.pguuid.AutoPgUuidField</span></tt></a> is new and is the
+first Django extension in the library.  It is an optional feature, which can be
+made a requirement in a project by specifying &#8220;pyneric[django-pguuid]&#8221; as a
+requirement.  See the documentation for more details and <tt class="xref py py-obj docutils literal"><span class="pre">django_test_app</span></tt>
+under the <tt class="xref py py-obj docutils literal"><span class="pre">tests</span></tt> directory for an example.</p>
+</div>
 <div class="section" id="version-1-1-1">
 <h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="module/meta.html#pyneric.meta.MetadataBehaviour" title="pyneric.meta.MetadataBehaviour"><tt class="xref py py-obj docutils literal"><span class="pre">MetadataBehaviour</span></tt></a> now takes a <tt class="xref py py-obj docutils literal"><span class="pre">validate_transforms</span></tt> argument
+<p><a class="reference internal" href="api/meta.html#pyneric.meta.MetadataBehaviour" title="pyneric.meta.MetadataBehaviour"><tt class="xref py py-obj docutils literal"><span class="pre">MetadataBehaviour</span></tt></a> now takes a <tt class="xref py py-obj docutils literal"><span class="pre">validate_transforms</span></tt> argument
 that (if set to true) will make validation methods (those that match the
 concatenation of <tt class="xref py py-obj docutils literal"><span class="pre">validate_prefix</span></tt> and a metadata field name) also transform
 the metadata value; that is, whatever the method returns is what the value
@@ -98,6 +106,7 @@ extensions and fixes for using the future library.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-1-2">Version 1.2</a></li>
 <li><a class="reference internal" href="#version-1-1-1">Version 1.1.1</a></li>
 <li><a class="reference internal" href="#version-1-1">Version 1.1</a></li>
 <li><a class="reference internal" href="#version-1-0">Version 1.0</a></li>
@@ -144,11 +153,11 @@ extensions and fixes for using the future library.</p>
         <li class="right" >
           <a href="examples.html" title="Examples"
              >previous</a> |</li>
-        <li><a href="index.html">pyneric 1.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">pyneric 1.2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2014, Craig Hurd-Rindy.
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>

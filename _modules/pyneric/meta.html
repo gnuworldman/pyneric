@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.meta &mdash; pyneric 1.1.1 documentation</title>
+    <title>pyneric.meta &mdash; pyneric 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.1',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.1.1 documentation" href="../../index.html" />
+    <link rel="top" title="pyneric 1.2.0 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -69,7 +69,7 @@
 
 
 <span class="nd">@util.add_to_all</span>
-<div class="viewcode-block" id="MetadataBehaviour"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour">[docs]</a><span class="k">class</span> <span class="nc">MetadataBehaviour</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour">[docs]</a><span class="k">class</span> <span class="nc">MetadataBehaviour</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;The behaviour of a `Metaclass`.</span>
 
@@ -117,7 +117,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_transforms</span> <span class="o">=</span> <span class="n">validate_transforms</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.metadata_attr"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.metadata_attr">[docs]</a>    <span class="k">def</span> <span class="nf">metadata_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.metadata_attr"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.metadata_attr">[docs]</a>    <span class="k">def</span> <span class="nf">metadata_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The name of a class attribute that may contain metadata.</span>
 
 <span class="sd">        The attribute may be a sequence of attribute names or a mapping of</span>
@@ -129,7 +129,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_attr</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.propagate_attr"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.propagate_attr">[docs]</a>    <span class="k">def</span> <span class="nf">propagate_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.propagate_attr"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.propagate_attr">[docs]</a>    <span class="k">def</span> <span class="nf">propagate_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The attribute name that contains the propagated attribute names.</span>
 
 <span class="sd">        This is the name of an internally-managed metadata attribute that can</span>
@@ -143,7 +143,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_propagate_attr</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.base_override_attr"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.base_override_attr">[docs]</a>    <span class="k">def</span> <span class="nf">base_override_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.base_override_attr"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.base_override_attr">[docs]</a>    <span class="k">def</span> <span class="nf">base_override_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The attribute name that contains a mapping of overridden values.</span>
 
 <span class="sd">        This is the name of an internally-managed metadata attribute that can</span>
@@ -157,7 +157,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_override_attr</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.storage_attr"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.storage_attr">[docs]</a>    <span class="k">def</span> <span class="nf">storage_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.storage_attr"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.storage_attr">[docs]</a>    <span class="k">def</span> <span class="nf">storage_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The name of the attribute in which metadata is stored.</span>
 
 <span class="sd">        This is the name of a metadata behaviour attribute that is used to</span>
@@ -170,7 +170,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_storage_attr</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.storage_class"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.storage_class">[docs]</a>    <span class="k">def</span> <span class="nf">storage_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.storage_class"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.storage_class">[docs]</a>    <span class="k">def</span> <span class="nf">storage_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The class used to contain metadata.</span>
 
 <span class="sd">        The class specified must be able to accept user metadata arguments via</span>
@@ -185,7 +185,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_storage_class</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.metadata_getter"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.metadata_getter">[docs]</a>    <span class="k">def</span> <span class="nf">metadata_getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.metadata_getter"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.metadata_getter">[docs]</a>    <span class="k">def</span> <span class="nf">metadata_getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The name of the class method used to retrieve metadata values.</span>
 
 <span class="sd">        This applies to both `Metaclass` instances and classes built with them.</span>
@@ -194,11 +194,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_getter</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="MetadataBehaviour.storage_is_mapping"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.storage_is_mapping">[docs]</a>    <span class="k">def</span> <span class="nf">storage_is_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.storage_is_mapping"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.storage_is_mapping">[docs]</a>    <span class="k">def</span> <span class="nf">storage_is_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return whether the `storage_class` is a `~collections.Mapping`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_storage_class</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="MetadataBehaviour.define_property_if_not_descriptor"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.define_property_if_not_descriptor">[docs]</a>    <span class="k">def</span> <span class="nf">define_property_if_not_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.define_property_if_not_descriptor"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.define_property_if_not_descriptor">[docs]</a>    <span class="k">def</span> <span class="nf">define_property_if_not_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define a property in `dict` if it is not already a data descriptor.</span>
 
 <span class="sd">        :param dict dict: The mapping in which to define the property.</span>
@@ -235,7 +235,7 @@
                 <span class="n">result</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="n">result</span>
 
-<div class="viewcode-block" id="MetadataBehaviour.get_behavioural_data"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.get_behavioural_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_behavioural_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.get_behavioural_data"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.get_behavioural_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_behavioural_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a three-tuple containing a class&#39;s behavioural data.</span>
 
 <span class="sd">        :param cls: The class from which to get the behavioural data.</span>
@@ -254,7 +254,7 @@
                           <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_override_attr</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">propagate</span><span class="p">,</span> <span class="n">base_overrides</span>
 </div>
-<div class="viewcode-block" id="MetadataBehaviour.get_class_metadata"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.get_class_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.get_class_metadata"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.get_class_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the metadata defined in a class definition.</span>
 
 <span class="sd">        :param class cls: The class being defined.</span>
@@ -298,7 +298,7 @@
             <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_override_attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_overrides</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="MetadataBehaviour.get_metadata"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.get_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.get_metadata"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.get_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return metadata from the given class.</span>
 
 <span class="sd">        :param class cls: The class from which to retrieve metadata.</span>
@@ -319,7 +319,7 @@
             <span class="k">pass</span>
         <span class="n">util</span><span class="o">.</span><span class="n">raise_attribute_error</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="MetadataBehaviour.prepare_new"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.MetadataBehaviour.prepare_new">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="MetadataBehaviour.prepare_new"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.MetadataBehaviour.prepare_new">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prepare `dict` prior to calling :meth:`~type.__new__`.</span>
 
 <span class="sd">        This sets values in `dict` that must be set during class creation to</span>
@@ -374,7 +374,7 @@
 
 
 <span class="nd">@util.add_to_all</span>
-<div class="viewcode-block" id="Metaclass"><a class="viewcode-back" href="../../module/meta.html#pyneric.meta.Metaclass">[docs]</a><span class="k">class</span> <span class="nc">Metaclass</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">with_metaclass</span><span class="p">(</span><span class="n">_Metametaclass</span><span class="p">,</span> <span class="nb">type</span><span class="p">)):</span>
+<div class="viewcode-block" id="Metaclass"><a class="viewcode-back" href="../../api/meta.html#pyneric.meta.Metaclass">[docs]</a><span class="k">class</span> <span class="nc">Metaclass</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">with_metaclass</span><span class="p">(</span><span class="n">_Metametaclass</span><span class="p">,</span> <span class="nb">type</span><span class="p">)):</span>
 
     <span class="sd">&quot;&quot;&quot;A metaclass for managing metadata.</span>
 
@@ -435,12 +435,12 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2014, Craig Hurd-Rindy.
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>

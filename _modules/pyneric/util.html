@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.util &mdash; pyneric 1.1.1 documentation</title>
+    <title>pyneric.util &mdash; pyneric 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.1',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.1.1 documentation" href="../../index.html" />
+    <link rel="top" title="pyneric 1.2.0 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -63,7 +63,7 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;add_to_all&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="add_to_all"><a class="viewcode-back" href="../../module/util.html#pyneric.util.add_to_all">[docs]</a><span class="k">def</span> <span class="nf">add_to_all</span><span class="p">(</span><span class="n">named_object</span><span class="p">):</span>
+<div class="viewcode-block" id="add_to_all"><a class="viewcode-back" href="../../api/util.html#pyneric.util.add_to_all">[docs]</a><span class="k">def</span> <span class="nf">add_to_all</span><span class="p">(</span><span class="n">named_object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add the name of the given object to its module&#39;s *__all__* attribute.</span>
 
 <span class="sd">    :param object named_object: anything with a *__name__* attribute</span>
@@ -99,7 +99,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="get_from_dict_or_objects"><a class="viewcode-back" href="../../module/util.html#pyneric.util.get_from_dict_or_objects">[docs]</a><span class="k">def</span> <span class="nf">get_from_dict_or_objects</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">objects</span><span class="p">,</span> <span class="n">pop_from_dict</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="get_from_dict_or_objects"><a class="viewcode-back" href="../../api/util.html#pyneric.util.get_from_dict_or_objects">[docs]</a><span class="k">def</span> <span class="nf">get_from_dict_or_objects</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">objects</span><span class="p">,</span> <span class="n">pop_from_dict</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Attempt to get a value via name from a mapping then from objects.</span>
 
 <span class="sd">    :param str name: the name for which to look</span>
@@ -128,7 +128,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="get_function_name"><a class="viewcode-back" href="../../module/util.html#pyneric.util.get_function_name">[docs]</a><span class="k">def</span> <span class="nf">get_function_name</span><span class="p">(</span><span class="n">back</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_function_name"><a class="viewcode-back" href="../../api/util.html#pyneric.util.get_function_name">[docs]</a><span class="k">def</span> <span class="nf">get_function_name</span><span class="p">(</span><span class="n">back</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the name of a function in the stack.</span>
 
 <span class="sd">    By default (no arguments) the name of the caller of this function is</span>
@@ -143,7 +143,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="module_attributes"><a class="viewcode-back" href="../../module/util.html#pyneric.util.module_attributes">[docs]</a><span class="k">def</span> <span class="nf">module_attributes</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">use_all</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">include_underscored</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="module_attributes"><a class="viewcode-back" href="../../api/util.html#pyneric.util.module_attributes">[docs]</a><span class="k">def</span> <span class="nf">module_attributes</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">use_all</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">include_underscored</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return a set of the attribute names in the given module.</span>
 
 <span class="sd">    :param module module: the module from which to get the attribute names</span>
@@ -173,7 +173,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="pascalize"><a class="viewcode-back" href="../../module/util.html#pyneric.util.pascalize">[docs]</a><span class="k">def</span> <span class="nf">pascalize</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="pascalize"><a class="viewcode-back" href="../../api/util.html#pyneric.util.pascalize">[docs]</a><span class="k">def</span> <span class="nf">pascalize</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the conversion of the given string value to Pascal casing.</span>
 
 <span class="sd">    :param str value: the string to convert</span>
@@ -199,7 +199,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="raise_attribute_error"><a class="viewcode-back" href="../../module/util.html#pyneric.util.raise_attribute_error">[docs]</a><span class="k">def</span> <span class="nf">raise_attribute_error</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+<div class="viewcode-block" id="raise_attribute_error"><a class="viewcode-back" href="../../api/util.html#pyneric.util.raise_attribute_error">[docs]</a><span class="k">def</span> <span class="nf">raise_attribute_error</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raise an instance of `AttributeError` with the standard message.</span>
 
 <span class="sd">    :param object obj: the object that is said to not have the attribute</span>
@@ -216,7 +216,7 @@
 <span class="nd">@add_to_all</span>
 <span class="c"># PY2 note: The definition would be the following in Python 3+:</span>
 <span class="c"># def tryf(func, *args, _except=Exception, _return=None, **kwargs):</span>
-<div class="viewcode-block" id="tryf"><a class="viewcode-back" href="../../module/util.html#pyneric.util.tryf">[docs]</a><span class="k">def</span> <span class="nf">tryf</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tryf"><a class="viewcode-back" href="../../api/util.html#pyneric.util.tryf">[docs]</a><span class="k">def</span> <span class="nf">tryf</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wrap a function call in a try/except statement.</span>
 
 <span class="sd">    :param function func: the function to call</span>
@@ -242,7 +242,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="underscore"><a class="viewcode-back" href="../../module/util.html#pyneric.util.underscore">[docs]</a><span class="k">def</span> <span class="nf">underscore</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">multicap</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="underscore"><a class="viewcode-back" href="../../api/util.html#pyneric.util.underscore">[docs]</a><span class="k">def</span> <span class="nf">underscore</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">multicap</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the conversion of the given string value to variable casing.</span>
 
 <span class="sd">    :param str value: the string to convert</span>
@@ -283,7 +283,7 @@
 
 </div>
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="valid_python_identifier"><a class="viewcode-back" href="../../module/util.html#pyneric.util.valid_python_identifier">[docs]</a><span class="k">def</span> <span class="nf">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dotted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="valid_python_identifier"><a class="viewcode-back" href="../../api/util.html#pyneric.util.valid_python_identifier">[docs]</a><span class="k">def</span> <span class="nf">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dotted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Validate that the given string value is a valid Python identifier.</span>
 
 <span class="sd">    :param str value: the identifier to validate</span>
@@ -345,12 +345,12 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.1.1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2014, Craig Hurd-Rindy.
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
