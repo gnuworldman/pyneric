@@ -1,6 +1,13 @@
 Release Notes
 =============
 
+Version 1.2.1
+-------------
+
+Allow APIs that utilize trailing slashes in `~pyneric.rest_requests`.  Specify
+a container with a trailing slash to make all resources under it have a
+trailing slash.
+
 Version 1.2
 -----------
 

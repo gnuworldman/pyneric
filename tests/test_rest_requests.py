@@ -12,10 +12,20 @@ class RestResourceTestCase(TestCase):
     def test_init_invalid_abstract(self):
         self.assertRaises(TypeError, rest_requests.RestResource, ROOT)
 
-    def test_init_invalid_url_path(self):
+    def test_init_invalid_url_path_type(self):
         bases = (rest_requests.RestResource,)
         attrs = dict(url_path=object())
         self.assertRaises(TypeError, type, 'Resource', bases, attrs)
+
+    def test_init_invalid_url_path_empty(self):
+        bases = (rest_requests.RestResource,)
+        attrs = dict(url_path='')
+        self.assertRaises(ValueError, type, 'Resource', bases, attrs)
+
+    def test_init_invalid_url_path_leading_slash(self):
+        bases = (rest_requests.RestResource,)
+        attrs = dict(url_path='/something')
+        self.assertRaises(ValueError, type, 'Resource', bases, attrs)
 
     def test_init_invalid_container_class(self):
         bases = (rest_requests.RestResource,)
@@ -32,6 +42,12 @@ class RestResourceTestCase(TestCase):
         class Resource(rest_requests.RestResource):
             url_path = 'resource'
         obj = Resource(ROOT + '/')
+        self.assertEqual('{}/{}/'.format(ROOT, Resource.url_path), obj.url)
+
+    def test_init_container_url_and_path_trailing_slash(self):
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource/'
+        obj = Resource(ROOT + '/')
         self.assertEqual('{}/{}'.format(ROOT, Resource.url_path), obj.url)
 
     def test_init_container_url_invalid(self):
@@ -47,9 +63,20 @@ class RestResourceTestCase(TestCase):
             url_path = 'resource'
             container_class = Container
         obj = Resource(Container(ROOT))
-        self.assertEqual('{}/{}/{}'.format(ROOT, Container.url_path,
-                                           Resource.url_path),
-                         obj.url)
+        expected = '{}/{}/{}'.format(ROOT, Container.url_path,
+                                     Resource.url_path)
+        self.assertEqual(expected, obj.url)
+
+    def test_init_container_resource_trailing_slash(self):
+        class Container(rest_requests.RestResource):
+            url_path = 'container/'
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource'
+            container_class = Container
+        obj = Resource(Container(ROOT))
+        expected = '{}/{}{}/'.format(ROOT, Container.url_path,
+                                     Resource.url_path)
+        self.assertEqual(expected, obj.url)
 
     def test_init_container_resource_invalid(self):
         class Container(rest_requests.RestResource):

@@ -20,17 +20,20 @@ from pyneric import util
 __all__ = []
 
 
+def _url_join(base, url):
+    if base.endswith('/'):
+        if not url.endswith('/'):
+            url += '/'
+    else:
+        base += '/'
+    return urljoin(base, url)
+
+
 def _url_split(url):
     result = list(urlsplit(url))
     result[2] = result[2].rstrip('/')
     result[3:] = '', ''
     return result
-
-
-def _with_trailing_slash(value):
-    if not value.endswith('/'):
-        value += '/'
-    return value
 
 
 class _RestMetaclass(Metaclass):
@@ -42,10 +45,19 @@ class _RestMetaclass(Metaclass):
 
     @staticmethod
     def validate_url_path(value):
-        if not (value is None or
-                isinstance(value, basestring) and value):
+        if value is None:
+            return  # Resource is abstract; no further validation is necessary.
+        if not isinstance(value, basestring):
             raise TypeError(
                 "invalid url_path attribute: {!r}"
+                .format(value))
+        elif not value:
+            raise ValueError(
+                "invalid url_path attribute (empty): {!r}"
+                .format(value))
+        elif value.startswith('/'):
+            raise ValueError(
+                "invalid url_path attribute (leading slash): {!r}"
                 .format(value))
 
     @staticmethod
@@ -96,9 +108,13 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
     it is the path under the base (API root or containing resource) identifying
     this resource.
 
-    This should not start or end with a path separator ("/"), but it may
-    contain separator(s) if there is no need to access the path segment(s)
-    before the last separator as distinct REST resource(s).
+    This may contain path separator(s) ("/") if there is no need to access the
+    path segments as distinct REST resources.
+
+    This cannot start with a path separator, but it may end with one if this
+    and resources under this one (i.e., those that use this one as container)
+    shall have trailing slashes.  This has no effect if the `container` has a
+    trailing slash.
 
     """
 
@@ -163,7 +179,7 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
             container = container.url
         elif not isinstance(container, basestring):
             invalid_for_type()
-        self._url = urljoin(_with_trailing_slash(container), self.url_path)
+        self._url = _url_join(container, self.url_path)
 
     @classmethod
     def from_url(cls, url):
@@ -221,6 +237,9 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
 
         This is an instance of :attr:`container_class` if that is not `None`;
         otherwise, this is the REST URL under which this resource resides.
+
+        Whether the container has a trailing slash determines whether the
+        resource's URL includes a trailing slash.
 
         """
         return self._container
@@ -288,7 +307,7 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
         self._id = id = self.validate_id(id)
         if id is None:
             return
-        self._url = urljoin(_with_trailing_slash(self._url), str(id))
+        self._url = _url_join(self._url, str(id))
 
     @classmethod
     def _from_url(cls, url, **kwargs):
