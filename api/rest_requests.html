@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.rest_requests &mdash; pyneric 1.2.0 documentation</title>
+    <title>pyneric.rest_requests &mdash; pyneric 1.2.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.0',
+        VERSION:     '1.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.0 documentation" href="../index.html" />
+    <link rel="top" title="pyneric 1.2.1 documentation" href="../index.html" />
     <link rel="up" title="API" href="../api.html" />
     <link rel="next" title="pyneric.django" href="django.html" />
     <link rel="prev" title="pyneric.meta" href="meta.html" /> 
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="meta.html" title="pyneric.meta"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
           <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
       </ul>
     </div>  
@@ -73,9 +73,12 @@ more details.</p>
 <p>This may be <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a> to signify that this is an abstract resource; otherwise,
 it is the path under the base (API root or containing resource) identifying
 this resource.</p>
-<p>This should not start or end with a path separator (&#8220;/&#8221;), but it may
-contain separator(s) if there is no need to access the path segment(s)
-before the last separator as distinct REST resource(s).</p>
+<p>This may contain path separator(s) (&#8220;/&#8221;) if there is no need to access the
+path segments as distinct REST resources.</p>
+<p>This cannot start with a path separator, but it may end with one if this
+and resources under this one (i.e., those that use this one as container)
+shall have trailing slashes.  This has no effect if the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><tt class="xref py py-obj docutils literal"><span class="pre">container</span></tt></a> has a
+trailing slash.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -124,6 +127,8 @@ with existing attributes in the referring resource).</p>
 <dd><p>The container of this resource.</p>
 <p>This is an instance of <a class="reference internal" href="#pyneric.rest_requests.RestResource.container_class" title="pyneric.rest_requests.RestResource.container_class"><tt class="xref py py-attr docutils literal"><span class="pre">container_class</span></tt></a> if that is not <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>;
 otherwise, this is the REST URL under which this resource resides.</p>
+<p>Whether the container has a trailing slash determines whether the
+resource&#8217;s URL includes a trailing slash.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -257,7 +262,7 @@ string representation.</p>
         <li class="right" >
           <a href="meta.html" title="pyneric.meta"
              >previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
           <li><a href="../api.html" >API</a> &raquo;</li> 
       </ul>
     </div>

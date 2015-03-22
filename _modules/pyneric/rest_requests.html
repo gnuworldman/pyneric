@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.rest_requests &mdash; pyneric 1.2.0 documentation</title>
+    <title>pyneric.rest_requests &mdash; pyneric 1.2.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.2.0',
+        VERSION:     '1.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.0 documentation" href="../../index.html" />
+    <link rel="top" title="pyneric 1.2.1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -69,17 +69,20 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[]</span>
 
 
+<span class="k">def</span> <span class="nf">_url_join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">+=</span> <span class="s">&#39;/&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s">&#39;/&#39;</span>
+    <span class="k">return</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+
+
 <span class="k">def</span> <span class="nf">_url_split</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
     <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
     <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
     <span class="k">return</span> <span class="n">result</span>
-
-
-<span class="k">def</span> <span class="nf">_with_trailing_slash</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
-        <span class="n">value</span> <span class="o">+=</span> <span class="s">&#39;/&#39;</span>
-    <span class="k">return</span> <span class="n">value</span>
 
 
 <span class="k">class</span> <span class="nc">_RestMetaclass</span><span class="p">(</span><span class="n">Metaclass</span><span class="p">):</span>
@@ -91,10 +94,19 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">validate_url_path</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c"># Resource is abstract; no further validation is necessary.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="s">&quot;invalid url_path attribute: {!r}&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;invalid url_path attribute (empty): {!r}&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;invalid url_path attribute (leading slash): {!r}&quot;</span>
                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
@@ -145,9 +157,13 @@
 <span class="sd">    it is the path under the base (API root or containing resource) identifying</span>
 <span class="sd">    this resource.</span>
 
-<span class="sd">    This should not start or end with a path separator (&quot;/&quot;), but it may</span>
-<span class="sd">    contain separator(s) if there is no need to access the path segment(s)</span>
-<span class="sd">    before the last separator as distinct REST resource(s).</span>
+<span class="sd">    This may contain path separator(s) (&quot;/&quot;) if there is no need to access the</span>
+<span class="sd">    path segments as distinct REST resources.</span>
+
+<span class="sd">    This cannot start with a path separator, but it may end with one if this</span>
+<span class="sd">    and resources under this one (i.e., those that use this one as container)</span>
+<span class="sd">    shall have trailing slashes.  This has no effect if the `container` has a</span>
+<span class="sd">    trailing slash.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -212,7 +228,7 @@
             <span class="n">container</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">url</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
             <span class="n">invalid_for_type</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">_with_trailing_slash</span><span class="p">(</span><span class="n">container</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">_url_join</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_path</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="RestResource.from_url"><a class="viewcode-back" href="../../api/rest_requests.html#pyneric.rest_requests.RestResource.from_url">[docs]</a>    <span class="k">def</span> <span class="nf">from_url</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
@@ -270,6 +286,9 @@
 
 <span class="sd">        This is an instance of :attr:`container_class` if that is not `None`;</span>
 <span class="sd">        otherwise, this is the REST URL under which this resource resides.</span>
+
+<span class="sd">        Whether the container has a trailing slash determines whether the</span>
+<span class="sd">        resource&#39;s URL includes a trailing slash.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container</span>
@@ -337,7 +356,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">_with_trailing_slash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">_url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_from_url</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -427,7 +446,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
