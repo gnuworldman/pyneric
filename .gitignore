@@ -55,3 +55,8 @@ target/
 
 # local settings
 settings_local.py
+
+# IDEs
+.*project
+.settings/
+.idea/
