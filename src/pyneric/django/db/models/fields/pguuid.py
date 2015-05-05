@@ -15,9 +15,13 @@ from pyneric.future import *
 
 from functools import wraps
 
+from django import VERSION as DJANGO_VERSION
 from django.db.models.fields import AutoField, Field
 from django.db.models.fields.related import ForeignKey
-from django_extensions.db.fields import PostgreSQLUUIDField
+if DJANGO_VERSION[:2] < (1, 8):
+    from django_extensions.db.fields import PostgreSQLUUIDField as UUIDField
+else:
+    from django.db.models.fields import UUIDField
 
 from pyneric.util import add_to_all
 
@@ -44,10 +48,13 @@ else:
 
 
 @add_to_all
-class AutoPgUuidField(PostgreSQLUUIDField, AutoField):
+class AutoPgUuidField(UUIDField, AutoField):
 
-    """A `PostgreSQLUUIDField` that is also an
-    `~django:django.db.models.AutoField`.
+    """A `UUIDField` that is also an `~django:django.db.models.AutoField`.
+
+    In Django 1.8, this is a real UUID field; earlier versions are supported
+    by django-extensions' PostgreSQLUUIDField, which stores real UUIDs, but
+    exposes them in Python as a CharField.
 
     The generation of the UUID value in the database must be set up manually
     (via a migration or another mechanism).  Django 1.7 migration example::
