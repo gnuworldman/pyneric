@@ -5,6 +5,7 @@ import uuid
 import warnings
 
 try:
+    from django import VERSION as DJANGO_VERSION
     from django.db import connection
     from django.test import TestCase
     from django_test_app import models
@@ -21,7 +22,12 @@ else:
             obj = models.AutoPgUuidTest()
             obj.full_clean()
             obj.save()
-            uuid.UUID(obj.uuid_field)
+            if DJANGO_VERSION[:2] < (1, 8):
+                # Verify that the field value can be coerced into a UUID.
+                uuid.UUID(obj.uuid_field)
+            else:
+                # Verify that the field value is a UUID.
+                self.assertIsInstance(obj.uuid_field, uuid.UUID)
             self.assertEqual(obj.uuid_field, obj.pk)
 
         def test_foreign_key(self):
