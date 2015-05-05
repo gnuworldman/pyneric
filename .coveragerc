@@ -1,3 +1,7 @@
+[report]
+show_missing = true
+
 [run]
 source = src
+branch = true
 omit = src/pyneric/future/*
