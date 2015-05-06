@@ -24,7 +24,9 @@ _all.add('basestring')
 from past.builtins import basestring
 
 if future.PY2:
-    _all |= {'str', 'super', 'type'}
+    # Purposely allow Python 2.6 to use this package, rather than:
+    #_all |= {'str', 'super', 'type'}
+    _all |= set(('str', 'super', 'type'))
     from pyneric.future.newstr import newstr as str
     from pyneric.future.newsuper import newsuper as super
     from pyneric.future.newtype import newtype as type

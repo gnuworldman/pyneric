@@ -18,9 +18,9 @@ from functools import wraps
 from django import VERSION as DJANGO_VERSION
 from django.db.models.fields import AutoField, Field
 from django.db.models.fields.related import ForeignKey
-if DJANGO_VERSION[:2] < (1, 8):
+if DJANGO_VERSION[:2] < (1, 8):  # pragma: no cover
     from django_extensions.db.fields import PostgreSQLUUIDField as UUIDField
-else:
+else:  # pragma: no cover
     from django.db.models.fields import UUIDField
 
 from pyneric.util import add_to_all
