@@ -348,6 +348,10 @@ intersphinx_mapping = {
         'http://docs.python.org/{}'.format(sys.version_info[0]),
         None
     ),
+    'requests': (
+        'http://docs.python-requests.org/en/latest/',
+        None
+    )
 }
 
 try:
