@@ -1,6 +1,15 @@
 Release Notes
 =============
 
+Version 1.3.0
+-------------
+
+Add the `pyneric.requests` module, which includes the new
+`~pyneric.requests.RequestHandler` class.
+
+Fix a Python 2.6 incompatibility in `pyneric.future`.  Note that Python 2.6 is
+still not officially supported.
+
 Version 1.2.1
 -------------
 
