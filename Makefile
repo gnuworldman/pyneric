@@ -28,6 +28,15 @@ readme:
 doc: readme
 	$(MAKE) -C docs html
 
+deb:
+	./setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=True bdist_deb
+
+deb2:
+	./setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=False bdist_deb
+
+deb3:
+	./setup.py --command-packages=stdeb.command sdist_dsc --with-python2=False --with-python3=True bdist_deb
+
 clean:
 	./setup.py clean -a
 	$(MAKE) -C docs clean
@@ -40,4 +49,4 @@ clean:
 #	git submodule update docs/_build/html
 #	git -C docs/_build/html checkout gh-pages
 
-.PHONY: test coverage coverage_html build readme doc clean
+.PHONY: test coverage coverage_html build readme doc clean deb deb2 deb3

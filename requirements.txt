@@ -7,3 +7,4 @@ future
 mock
 psycopg2
 pyinotify>=0.9
+stdeb
