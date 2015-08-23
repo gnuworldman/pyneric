@@ -9,7 +9,7 @@ flake:
 	flake8 src
 
 test: flake
-	PYTHONPATH=src:tests coverage run --module unittest discover --pattern 'test_*.py'
+	PYTHONPATH=src:tests coverage run --module unittest discover --start-directory tests/non_django
 	PYTHONPATH=src:tests coverage run --append tests/django_test_app/manage.py test django_test_app --noinput
 	PYTHONPATH=src python -m doctest docs/examples.rst
 
