@@ -3,12 +3,12 @@
 
 from unittest import TestCase
 
-import pyneric
+import pyneric.util
 
 
 class AddToAllTestMixin(object):
 
-    func = staticmethod(pyneric.add_to_all)
+    func = staticmethod(pyneric.util.add_to_all)
 
     def tearDown(self):
         del globals()['__all__']
@@ -65,7 +65,7 @@ class AddToAllInvalidTestCase(AddToAllTestMixin, TestCase):
 
 class GetFromDictOrObjectsTestCase(TestCase):
 
-    func = staticmethod(pyneric.get_from_dict_or_objects)
+    func = staticmethod(pyneric.util.get_from_dict_or_objects)
 
     def setUp(self):
         self.data = dict(a='x')
@@ -94,7 +94,7 @@ class GetFromDictOrObjectsTestCase(TestCase):
 
 class GetFunctionNameTestCase(TestCase):
 
-    func = staticmethod(pyneric.get_function_name)
+    func = staticmethod(pyneric.util.get_function_name)
 
     def test_default(self):
         self.assertEqual('test_default', self.func())
@@ -114,7 +114,7 @@ class GetFunctionNameTestCase(TestCase):
 
 class ModuleAttributesTestCase(TestCase):
 
-    func = staticmethod(pyneric.module_attributes)
+    func = staticmethod(pyneric.util.module_attributes)
 
     def test_default(self):
         import module_for_testing_attributes as test_module
@@ -149,7 +149,7 @@ class ModuleAttributesTestCase(TestCase):
                            include_underscored=True)
         if not utils.PY2:
             for possibility in ('__spec__', '__initializing__'):
-                pyneric.tryf(actual.remove, possibility, _except=KeyError)
+                pyneric.util.tryf(actual.remove, possibility, _except=KeyError)
         self.assertEqual(expected, actual)
 
     def test_use_all_without_all(self):
@@ -160,7 +160,7 @@ class ModuleAttributesTestCase(TestCase):
 
 class PascalizeTestCase(TestCase):
 
-    func = staticmethod(pyneric.pascalize)
+    func = staticmethod(pyneric.util.pascalize)
 
     def test_basic(self):
         name = 'basic_python_identifier'
@@ -192,7 +192,7 @@ class PascalizeTestCase(TestCase):
 
 class TryfTestCase(TestCase):
 
-    func = staticmethod(pyneric.tryf)
+    func = staticmethod(pyneric.util.tryf)
 
     def test_base_exception(self):
         # exception is caught
@@ -225,7 +225,7 @@ class TryfTestCase(TestCase):
 
 class UnderscoreTestCase(TestCase):
 
-    func = staticmethod(pyneric.underscore)
+    func = staticmethod(pyneric.util.underscore)
 
     def test_basic(self):
         name = 'BasicPythonIdentifier'
@@ -274,7 +274,7 @@ class UnderscoreTestCase(TestCase):
 
 class ValidPythonIdentifierTestCase(TestCase):
 
-    func = staticmethod(pyneric.valid_python_identifier)
+    func = staticmethod(pyneric.util.valid_python_identifier)
     valid = 'valid_identifier', 'ValidIdentifier', 'inv2e_8vnvAnK', '__VaLiD'
     invalid = 'invalid ', 'isnt valid', '$invalid', 'inva.lid'
 
