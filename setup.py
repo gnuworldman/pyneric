@@ -4,7 +4,7 @@
 
 import os
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 THIS_DIRECTORY = os.path.dirname(__file__)
@@ -35,13 +35,7 @@ setup(
         'Topic :: Utilities',
         ],
     package_dir={'': 'src'},
-    packages=['pyneric',
-              'pyneric.future',
-              'pyneric.django',
-              'pyneric.django.db',
-              'pyneric.django.db.models',
-              'pyneric.django.db.models.fields',
-              ],
+    packages=find_packages('src'),
     install_requires=['future'],
     extras_require={'fsnotify': ['pyinotify>=0.9'],
                     'requests': ['requests'],
