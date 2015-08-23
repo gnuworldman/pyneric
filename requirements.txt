@@ -1,4 +1,4 @@
-Django>=1.6
+Django>=1.8
 Sphinx
 coveralls
 django-extensions>=1.3.0
