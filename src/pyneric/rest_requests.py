@@ -13,14 +13,18 @@ import functools
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 from pyneric.meta import Metaclass
-from pyneric.util import tryf
 from pyneric import util
+from pyneric.util import tryf
 
 
 __all__ = []
 
+_ENCODING = 'UTF-8'
+
 
 def _url_join(base, url):
+    base = ensure_text(base)
+    url = ensure_text(url)
     if base.endswith('/'):
         if not url.endswith('/'):
             url += '/'
@@ -47,11 +51,17 @@ class _RestMetaclass(Metaclass):
     def validate_url_path(value):
         if value is None:
             return  # Resource is abstract; no further validation is necessary.
-        if not isinstance(value, basestring):
+        try:
+            ensure_text(value, _ENCODING)
+        except TypeError:
             raise TypeError(
-                "invalid url_path attribute: {!r}"
+                "invalid url_path attribute (not string): {!r}"
                 .format(value))
-        elif not value:
+        except UnicodeDecodeError:
+            raise ValueError(
+                "invalid url_path attribute (not valid {}): {!r}"
+                .format(_ENCODING, value))
+        if not value:
             raise ValueError(
                 "invalid url_path attribute (empty): {!r}"
                 .format(value))
@@ -71,17 +81,14 @@ class _RestMetaclass(Metaclass):
 
     @staticmethod
     def validate_reference_attribute(value):
-        if value is not None:
-            if not isinstance(value, basestring):
-                raise TypeError(
-                    "invalid reference_attribute attribute: {!r}"
-                    .format(value))
-            try:
-                util.valid_python_identifier(value, exception=ValueError)
-            except ValueError as exc:
-                raise ValueError(
-                    "invalid reference_attribute attribute: {}"
-                    .format(exc))
+        if value is None:
+            return
+        try:
+            util.valid_python_identifier(value, exception=True)
+        except (TypeError, UnicodeDecodeError, ValueError) as exc:
+            raise type(exc)(
+                "invalid reference_attribute attribute: {!r} ({})"
+                .format(value, exc))
 
     @property
     def is_abstract(cls):
@@ -113,8 +120,12 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
 
     This cannot start with a path separator, but it may end with one if this
     and resources under this one (i.e., those that use this one as container)
-    shall have trailing slashes.  This has no effect if the `container` has a
-    trailing slash.
+    shall each have a trailing path separator.  If the `container` passed to
+    the constructor is a URL string with a trailing slash or a
+    :class:`RestResource` with a `url_path` ending with a path separator, then
+    it is not significant whether this value has a trailing path separator,
+    since all resources under that container are represented with a trailing
+    path separator.
 
     """
 
@@ -156,12 +167,16 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
     """
 
     def __init__(self, container):
-        def invalid_for_type():
-            raise ValueError(
-                "Container {!r} is invalid for resource type {!r}."
-                .format(container, type(self)))
+        def invalid_for_type(reason=None):
+            message = ("Container {!r} is invalid for resource type {!r}."
+                       .format(container, type(self)))
+            if reason:
+                message += "  " + reason
+            raise ValueError(message)
         if self.is_abstract:
-            raise TypeError("abstract RestResource is uninstantiable")
+            raise TypeError(
+                "{!r} is an abstract RestResource and cannot be instantiated."
+                .format(type(self)))
         self._container = container
         if self.container_class:
             if not (isinstance(container, self.container_class) and
@@ -178,7 +193,7 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
             setattr(self, attr, container)
             container = container.url
         elif not isinstance(container, basestring):
-            invalid_for_type()
+            invalid_for_type("It must be a string (URL).")
         self._url = _url_join(container, self.url_path)
 
     @classmethod
@@ -200,16 +215,17 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
 
     @classmethod
     def _get_container_from_url(cls, url):
+        original_url, url = url, ensure_text(url, _ENCODING)
         url_split = _url_split(url)
         segments = url_split[2].split('/')
-        resource_segments = cls.url_path.split('/')
+        resource_segments = ensure_text(cls.url_path).split('/')
         size = len(resource_segments)
         if segments[-size:] != resource_segments:
             multiple = size != 1
             raise ValueError(
                 "The last {}segment{} of the URL {!r} {} invalid for {}."
                 .format("{} ".format(size) if multiple else "",
-                        "s" if multiple else "", url,
+                        "s" if multiple else "", original_url,
                         "are" if multiple else "is", cls.__name__))
         url_split[2] = '/'.join(segments[:-size])
         return urlunsplit(url_split)
@@ -318,7 +334,7 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
             result = super_method(url)
         except ValueError:
             result = None
-        url_split = _url_split(url)
+        url_split = _url_split(ensure_text(url, _ENCODING))
         segments = url_split[2].split('/')
         try:
             id = cls.validate_id(segments.pop(-1))

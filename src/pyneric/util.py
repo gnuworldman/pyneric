@@ -138,11 +138,11 @@ def pascalize(value, validate=True):
     without the underscore.
 
     """
+    result_type = type(value)
     if validate:
         valid_python_identifier(value, exception=True)
-    elif not isinstance(value, basestring):  # pragma: no cover
-        raise TypeError("{!r} is not a string.".format(value))
-    result_type = type(value)
+    else:  # pragma: no cover
+        value = ensure_text(value)
     result = re.sub('(?:^|_)(.)', lambda x: x.group(0)[-1].upper(), value)
     if type(result) is not result_type:  # pragma: no cover
         result = result_type(result)
@@ -218,16 +218,16 @@ def underscore(value, validate=True, multicap=True):
     'a_b_c_def_g_hij_k_l_m_n_o_pqrs'
 
     """
+    result_type = type(value)
     if validate:
         valid_python_identifier(value, exception=True)
-    elif not isinstance(value, basestring):  # pragma: no cover
-        raise TypeError("{!r} is not a string.".format(value))
+    else:  # pragma: no cover
+        value = ensure_text(value)
     patterns = ['[A-Z]']
     if multicap:
         patterns.insert(0, '[A-Z]+(?=($|[A-Z][a-z]))')
     pattern = '(' + '|'.join(patterns) + ')'
     result = re.sub(pattern, lambda x: "_" + x.groups()[0].lower(), value)[1:]
-    result_type = type(value)
     if type(result) is not result_type:  # pragma: no cover
         result = result_type(result)
     return result
@@ -247,8 +247,8 @@ def valid_python_identifier(value, dotted=False, exception=False):
     :raises ValueError: if *exception* is true and validation fails
 
     """
-    if not isinstance(value, basestring):
-        raise TypeError("{!r} is not a string.".format(value))
+    original_value = value
+    value = ensure_text(value)
     if dotted:
         return all(valid_python_identifier(x, exception=exception)
                    for x in value.split('.'))
@@ -262,4 +262,4 @@ def valid_python_identifier(value, dotted=False, exception=False):
     if not (inspect.isclass(exception) and
             issubclass(exception, BaseException)):
         exception = ValueError
-    raise exception("{!r} {}.".format(value, problem))
+    raise exception("{!r} {}.".format(original_value, problem))

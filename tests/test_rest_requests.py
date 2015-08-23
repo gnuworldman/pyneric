@@ -22,6 +22,11 @@ class RestResourceTestCase(TestCase):
         attrs = dict(url_path='')
         self.assertRaises(ValueError, type, 'Resource', bases, attrs)
 
+    def test_init_invalid_url_path_encoding(self):
+        bases = (rest_requests.RestResource,)
+        attrs = dict(url_path=b'ab\xcd')
+        self.assertRaises(ValueError, type, 'Resource', bases, attrs)
+
     def test_init_invalid_url_path_leading_slash(self):
         bases = (rest_requests.RestResource,)
         attrs = dict(url_path='/something')
