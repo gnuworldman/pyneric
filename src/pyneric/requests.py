@@ -8,16 +8,21 @@ from pyneric.future import *
 
 import requests
 
+from .http import v1_1 as http
 
-METHOD_METHODS = {
-    'get': dict(allow_redirects=True),
-    'options': dict(allow_redirects=True),
-    'head': dict(allow_redirects=False),
-    'post': None,
-    'put': None,
-    'patch': None,
-    'delete': None,
-}
+
+SUPPORTED_METHODS = (
+    http.GET,
+    http.OPTIONS,
+    http.HEAD,
+    http.POST,
+    http.PUT,
+    http.patch.PATCH,
+    http.DELETE,
+)
+"""The HTTP methods supported by `requests:requests` as functions.
+
+These are also exposed as methods in :class:`RequestHandler`."""
 
 
 class RequestHandler(object):
@@ -62,14 +67,11 @@ class RequestHandler(object):
         return handler.request(**kwargs)
 
 
-for _method in METHOD_METHODS:
-    def _method_func(self, url, method=_method, **kwargs):
-        _defaults = METHOD_METHODS[method]
-        if _defaults:
-            for k, v in _defaults.items():
-                kwargs.setdefault(k, v)
-        return self.request(method, url, **kwargs)
-    _method_func.__name__ = future.native_str(_method)
+for _method in SUPPORTED_METHODS:
+    def _method_func(self, url, _method=_method, **kwargs):
+        kwargs.setdefault('allow_redirects', _method.safe)
+        return self.request(_method.token, url, **kwargs)
+    _method_func.__name__ = future.native_str(_method.token.lower())
     _method_func.__doc__ = ("Call :meth:`request` with method '{}'."
-                            .format(_method))
-    setattr(RequestHandler, _method, _method_func)
+                            .format(_method.token))
+    setattr(RequestHandler, _method.token.lower(), _method_func)

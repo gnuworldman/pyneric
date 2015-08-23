@@ -1,18 +1,19 @@
 from mock import patch
 from unittest import TestCase
 
-from pyneric.requests import METHOD_METHODS, RequestHandler
+from pyneric.requests import RequestHandler, SUPPORTED_METHODS
 
 
 @patch('pyneric.requests.requests.request')
 class RequestHandlerTestCase(TestCase):
 
-    def test_method_methods(self, request_mock):
+    def test_supported_methods(self, request_mock):
         handler = RequestHandler()
         url = object()
-        for method, defaults in METHOD_METHODS.items():
-            kwargs = dict(defaults or {}, method=method, url=url)
-            getattr(handler, method)(url)
+        for method in SUPPORTED_METHODS:
+            kwargs = dict(method=method.token, url=url,
+                          allow_redirects=method.safe)
+            getattr(handler, method.token.lower())(url)
             request_mock.assert_called_once_with(**kwargs)
             request_mock.reset_mock()
 
@@ -32,7 +33,8 @@ class RequestHandlerTestCase(TestCase):
         request_mock.assert_called_once_with(**kwargs)
         request_mock.reset_mock()
         handler.get(url, headers=headers)
-        kwargs.update(METHOD_METHODS['get'] or {})
+        # GET is a safe method, allows redirects by default.
+        kwargs.update(allow_redirects=True)
         request_mock.assert_called_once_with(**kwargs)
 
     def test_request(self, request_mock):
