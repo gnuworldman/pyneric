@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+"""Tests for pyneric.rest_requests"""
+
 from unittest import TestCase
 
+from future.utils import PY2
 from pyneric import rest_requests
 
 
@@ -36,6 +40,14 @@ class RestResourceTestCase(TestCase):
         bases = (rest_requests.RestResource,)
         attrs = dict(container_class=object())
         self.assertRaises(TypeError, type, 'Resource', bases, attrs)
+
+    def test_init_url_path_unicode(self):
+        PATH = u'resöurce'
+
+        class Resource(rest_requests.RestResource):
+            url_path = PATH
+
+        self.assertEqual(PATH, Resource.url_path)
 
     def test_init_container_url(self):
         class Resource(rest_requests.RestResource):
@@ -150,6 +162,15 @@ class RestResourceTestCase(TestCase):
         self.assertRaises(TypeError, type, 'Resource', bases, attrs)
 
     def test_from_url(self):
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource'
+
+        url = '{}/{}'.format(ROOT, Resource.url_path)
+        obj = Resource.from_url(url)
+        self.assertIsInstance(obj.container, basestring if PY2 else str)
+        self.assertEqual(obj.container, ROOT)
+
+    def test_from_url_container(self):
         class Container(rest_requests.RestResource):
             url_path = 'container'
 
@@ -158,6 +179,58 @@ class RestResourceTestCase(TestCase):
             container_class = Container
 
         url = '{}/{}/{}'.format(ROOT, Container.url_path, Resource.url_path)
+        obj = Resource.from_url(url)
+        self.assertIsInstance(obj.container_, Container)
+        self.assertEqual(obj.container_.container, ROOT)
+
+    def test_from_url_trailing_slash_container(self):
+        class Container(rest_requests.RestResource):
+            url_path = 'container/'
+
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource'
+            container_class = Container
+
+        url = '{}/{}{}'.format(ROOT, Container.url_path, Resource.url_path)
+        obj = Resource.from_url(url)
+        self.assertIsInstance(obj.container_, Container)
+        self.assertEqual(obj.container_.container, ROOT)
+
+    def test_from_url_trailing_slash_container_not_url(self):
+        class Container(rest_requests.RestResource):
+            url_path = 'container/'
+
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource'
+            container_class = Container
+
+        url = '{}/{}{}'.format(ROOT, Container.url_path, Resource.url_path)
+        obj = Resource.from_url(url.rstrip('/'))
+        self.assertIsInstance(obj.container_, Container)
+        self.assertEqual(obj.container_.container, ROOT)
+
+    def test_from_url_trailing_slash_resource(self):
+        class Container(rest_requests.RestResource):
+            url_path = 'container'
+
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource/'
+            container_class = Container
+
+        url = '{}/{}/{}'.format(ROOT, Container.url_path, Resource.url_path)
+        obj = Resource.from_url(url)
+        self.assertIsInstance(obj.container_, Container)
+        self.assertEqual(obj.container_.container, ROOT)
+
+    def test_from_url_trailing_slash_both(self):
+        class Container(rest_requests.RestResource):
+            url_path = 'container/'
+
+        class Resource(rest_requests.RestResource):
+            url_path = 'resource/'
+            container_class = Container
+
+        url = '{}/{}{}'.format(ROOT, Container.url_path, Resource.url_path)
         obj = Resource.from_url(url)
         self.assertIsInstance(obj.container_, Container)
         self.assertEqual(obj.container_.container, ROOT)
@@ -213,6 +286,14 @@ class RestCollectionTestCase(TestCase):
         url = '{}/{}/{}'.format(ROOT, Collection.url_path, id_)
         self.assertEqual(url, Collection(ROOT, id_).url)
 
+    def test_init_member_unicode(self):
+        class Collection(rest_requests.RestCollection):
+            url_path = 'things'
+
+        id_ = u'impörtant thing'
+        url = u'{}/{}/{}'.format(ROOT, Collection.url_path, id_)
+        self.assertEqual(url, Collection(ROOT, id_).url)
+
     def test_init_invalid_id_type(self):
         bases = (rest_requests.RestCollection,)
         attrs = dict(id_type='not a class')
@@ -244,6 +325,24 @@ class RestCollectionTestCase(TestCase):
         resource_id = 'another'
         url = '{}/{}/{}/{}/{}'.format(ROOT, Container.url_path, container_id,
                                       Resource.url_path, resource_id)
+        obj = Resource.from_url(url)
+        self.assertIsInstance(obj.container_, Container)
+        self.assertEqual(container_id, obj.container_.id)
+        self.assertEqual(ROOT, obj.container_.container)
+        self.assertEqual(resource_id, obj.id)
+
+    def test_from_url_member_unicode(self):
+        class Container(rest_requests.RestCollection):
+            url_path = 'things'
+
+        class Resource(rest_requests.RestCollection):
+            url_path = 'others'
+            container_class = Container
+
+        container_id = u'a thĩng'
+        resource_id = u'anöther'
+        url = u'{}/{}/{}/{}/{}'.format(ROOT, Container.url_path, container_id,
+                                       Resource.url_path, resource_id)
         obj = Resource.from_url(url)
         self.assertIsInstance(obj.container_, Container)
         self.assertEqual(container_id, obj.container_.id)

@@ -42,6 +42,7 @@ clean:
 	$(MAKE) -C docs clean
 	$(RM) MANIFEST
 	$(RM) -r dist
+	$(RM) -r src/*.egg-info
 	$(RM) -r htmlcov
 	coverage erase
 	find . -type d -name '__pycache__' | xargs $(RM) -r

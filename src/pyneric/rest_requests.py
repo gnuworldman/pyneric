@@ -21,21 +21,24 @@ __all__ = []
 
 _ENCODING = 'UTF-8'
 
+SEPARATOR = '/'
+"""URL path separator"""
+
 
 def _url_join(base, url):
     base = ensure_text(base)
     url = ensure_text(url)
-    if base.endswith('/'):
-        if not url.endswith('/'):
-            url += '/'
+    if base.endswith(SEPARATOR):
+        if not url.endswith(SEPARATOR):
+            url += SEPARATOR
     else:
-        base += '/'
+        base += SEPARATOR
     return urljoin(base, url)
 
 
 def _url_split(url):
     result = list(urlsplit(url))
-    result[2] = result[2].rstrip('/')
+    result[2] = result[2].rstrip(SEPARATOR)
     result[3:] = '', ''
     return result
 
@@ -65,7 +68,7 @@ class _RestMetaclass(Metaclass):
             raise ValueError(
                 "invalid url_path attribute (empty): {!r}"
                 .format(value))
-        elif value.startswith('/'):
+        elif value.startswith(SEPARATOR):
             raise ValueError(
                 "invalid url_path attribute (leading slash): {!r}"
                 .format(value))
@@ -217,8 +220,9 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
     def _get_container_from_url(cls, url):
         original_url, url = url, ensure_text(url, _ENCODING)
         url_split = _url_split(url)
-        segments = url_split[2].split('/')
-        resource_segments = ensure_text(cls.url_path).split('/')
+        segments = url_split[2].split(SEPARATOR)
+        resource_segments = (ensure_text(cls.url_path).rstrip(SEPARATOR)
+                             .split(SEPARATOR))
         size = len(resource_segments)
         if segments[-size:] != resource_segments:
             multiple = size != 1
@@ -227,7 +231,7 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
                 .format("{} ".format(size) if multiple else "",
                         "s" if multiple else "", original_url,
                         "are" if multiple else "is", cls.__name__))
-        url_split[2] = '/'.join(segments[:-size])
+        url_split[2] = SEPARATOR.join(segments[:-size])
         return urlunsplit(url_split)
 
     def __getattr__(self, item):
@@ -335,14 +339,14 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
         except ValueError:
             result = None
         url_split = _url_split(ensure_text(url, _ENCODING))
-        segments = url_split[2].split('/')
+        segments = url_split[2].split(SEPARATOR)
         try:
             id = cls.validate_id(segments.pop(-1))
         except ValueError:
             if result:
                 return result
             raise
-        url_split[2] = '/'.join(segments)
+        url_split[2] = SEPARATOR.join(segments)
         collection_url = urlunsplit(url_split)
         member_result = tryf(super_method, collection_url, id=id)
         if result and member_result:
