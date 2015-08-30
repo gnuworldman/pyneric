@@ -36,7 +36,7 @@ setup(
         ],
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    install_requires=['future'],
+    install_requires=['future>=0.15'],
     extras_require={'fsnotify': ['pyinotify>=0.9'],
                     'requests': ['requests'],
                     'django-pguuid': ['Django>=1.6', 'django-extensions>=1.3.0', 'psycopg2'],
