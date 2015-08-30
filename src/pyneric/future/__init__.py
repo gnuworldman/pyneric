@@ -34,9 +34,12 @@ if future.PY2:
     from pyneric.future.newtype import newtype as type
 
 
-# DEPRECATED:  Use future.python_2_unicode_compatible when importing *.
 _all.add('python_2_unicode_compatible')
 python_2_unicode_compatible = future.python_2_unicode_compatible
+python_2_unicode_compatible.__doc__ = """
+    DEPRECATED:  Use this method from its source (`future.utils`).
+    With ``from pyneric.future import *``, it can be referenced with
+    ``future.python_2_unicode_compatible``."""
 
 
 _all.add('ensure_text')

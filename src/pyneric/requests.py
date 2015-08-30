@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The `pyneric.requests` module contains `requests:requests` helpers."""
+"""Helpers for the `requests:requests` library."""
 
 # Support Python 2 & 3.
 from __future__ import (absolute_import, division, print_function,
@@ -8,7 +8,7 @@ from pyneric.future import *
 
 import requests
 
-from .http import v1_1 as http
+from pyneric.http import v1_1 as http
 
 
 SUPPORTED_METHODS = (
@@ -50,7 +50,7 @@ class RequestHandler(object):
         :param string url: request call argument
         :param kwargs: request call keyword arguments
         :returns: result of the request
-        :rtype: depending on implementation;
+        :rtype: dependent on implementation;
                 `~requests:requests.Response` by default
 
         This can be overridden in a subclass, but the most common use
@@ -68,9 +68,13 @@ class RequestHandler(object):
 
 
 for _method in SUPPORTED_METHODS:
-    def _method_func(self, url, _method=_method, **kwargs):
-        kwargs.setdefault('allow_redirects', _method.safe)
-        return self.request(_method.token, url, **kwargs)
+    # A closure is needed to refer to the correct method.
+    def _get_method_func(method):
+        def _method_func(self, url, **kwargs):
+            kwargs.setdefault('allow_redirects', method.safe)
+            return self.request(method.token, url, **kwargs)
+        return _method_func
+    _method_func = _get_method_func(_method)
     _method_func.__name__ = future.native_str(_method.token.lower())
     _method_func.__doc__ = ("Call :meth:`request` with method '{}'."
                             .format(_method.token))

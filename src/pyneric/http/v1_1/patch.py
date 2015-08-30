@@ -23,15 +23,8 @@ PATCH = Method(
     idempotent=False,
     cacheable=False,
 )
+"""Representation of the HTTP 1.1 PATCH request method."""
 
-# Use responsibly.  From the RFC:
-# A response to this method is only cacheable if it contains explicit
-# freshness information (such as an Expires header or
-# "Cache-Control: max-age" directive) as well as the Content-Location
-# header matching the Request-URI, indicating that the PATCH response
-# body is a resource representation.  A cached PATCH response can only
-# be used to respond to subsequent GET and HEAD requests; it MUST NOT
-# be used to respond to other methods (in particular, PATCH).
 CACHEABLE_PATCH = Method(
     PATCH.token,
     PATCH.description,
@@ -39,3 +32,17 @@ CACHEABLE_PATCH = Method(
     idempotent=PATCH.idempotent,
     cacheable=True,
 )
+"""Representation of the HTTP 1.1 cacheable PATCH request method.
+
+Use this responsibly (pun intended, but also serious).  From the RFC:
+
+    A response to this method is only cacheable if it contains explicit
+    freshness information (such as an Expires header or
+    "Cache-Control: max-age" directive) as well as the Content-Location
+    header matching the Request-URI, indicating that the PATCH response
+    body is a resource representation.  A cached PATCH response can
+    only be used to respond to subsequent GET and HEAD requests; it
+    MUST NOT be used to respond to other methods (in particular,
+    PATCH).
+
+"""
