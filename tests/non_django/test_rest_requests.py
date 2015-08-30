@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 """Tests for pyneric.rest_requests"""
 
-from unittest import TestCase
-
 from future.utils import PY2
+
+from unittest import TestCase
+if PY2:
+    from urllib import quote
+else:
+    from urllib.parse import quote
+
 from pyneric import rest_requests
 
 
@@ -236,12 +241,8 @@ class RestResourceTestCase(TestCase):
         self.assertEqual(obj.container_.container, ROOT)
 
     def test_from_url_invalid(self):
-        class Container(rest_requests.RestResource):
-            url_path = 'container'
-
         class Resource(rest_requests.RestResource):
             url_path = 'resource'
-            container_class = Container
 
         self.assertRaises(ValueError, Resource.from_url, 'invalid://url')
 
@@ -283,7 +284,7 @@ class RestCollectionTestCase(TestCase):
             url_path = 'things'
 
         id_ = 'important thing'
-        url = '{}/{}/{}'.format(ROOT, Collection.url_path, id_)
+        url = '{}/{}/{}'.format(ROOT, Collection.url_path, quote(id_))
         self.assertEqual(url, Collection(ROOT, id_).url)
 
     def test_init_member_unicode(self):
@@ -291,7 +292,16 @@ class RestCollectionTestCase(TestCase):
             url_path = 'things'
 
         id_ = u'impörtant thing'
-        url = u'{}/{}/{}'.format(ROOT, Collection.url_path, id_)
+        url = u'{}/{}/{}'.format(ROOT, Collection.url_path,
+                                 quote(id_.encode('utf-8') if PY2 else id_))
+        self.assertEqual(url, Collection(ROOT, id_).url)
+
+    def test_init_member_slash(self):
+        class Collection(rest_requests.RestCollection):
+            url_path = 'things'
+
+        id_ = 'important/thing'
+        url = '{}/{}/{}'.format(ROOT, Collection.url_path, quote(id_, safe=''))
         self.assertEqual(url, Collection(ROOT, id_).url)
 
     def test_init_invalid_id_type(self):
@@ -321,15 +331,23 @@ class RestCollectionTestCase(TestCase):
             url_path = 'others'
             container_class = Container
 
+        def inner_test(obj):
+            self.assertIsInstance(obj.container_, Container)
+            self.assertEqual(container_id, obj.container_.id)
+            self.assertEqual(ROOT, obj.container_.container)
+            self.assertEqual(resource_id, obj.id)
+
         container_id = 'a thing'
-        resource_id = 'another'
+        resource_id = 'an other'
         url = '{}/{}/{}/{}/{}'.format(ROOT, Container.url_path, container_id,
                                       Resource.url_path, resource_id)
-        obj = Resource.from_url(url)
-        self.assertIsInstance(obj.container_, Container)
-        self.assertEqual(container_id, obj.container_.id)
-        self.assertEqual(ROOT, obj.container_.container)
-        self.assertEqual(resource_id, obj.id)
+        inner_test(Resource.from_url(url))
+
+        # Test the same thing with a properly quoted URL.
+        url = '{}/{}/{}/{}/{}'.format(ROOT, Container.url_path,
+                                      quote(container_id), Resource.url_path,
+                                      quote(resource_id))
+        inner_test(Resource.from_url(url))
 
     def test_from_url_member_unicode(self):
         class Container(rest_requests.RestCollection):
@@ -339,15 +357,43 @@ class RestCollectionTestCase(TestCase):
             url_path = 'others'
             container_class = Container
 
+        def inner_test(obj):
+            self.assertIsInstance(obj.container_, Container)
+            self.assertEqual(container_id, obj.container_.id)
+            self.assertEqual(ROOT, obj.container_.container)
+            self.assertEqual(resource_id, obj.id)
+
         container_id = u'a thĩng'
         resource_id = u'anöther'
         url = u'{}/{}/{}/{}/{}'.format(ROOT, Container.url_path, container_id,
                                        Resource.url_path, resource_id)
-        obj = Resource.from_url(url)
-        self.assertIsInstance(obj.container_, Container)
-        self.assertEqual(container_id, obj.container_.id)
-        self.assertEqual(ROOT, obj.container_.container)
-        self.assertEqual(resource_id, obj.id)
+        inner_test(Resource.from_url(url))
+
+        # Test the same thing with a properly quoted URL.
+        url = u'{}/{}/{}/{}/{}'.format(ROOT, Container.url_path,
+                                       quote(container_id.encode('utf-8')
+                                             if PY2 else container_id),
+                                       Resource.url_path,
+                                       quote(resource_id.encode('utf-8')
+                                             if PY2 else resource_id))
+        inner_test(Resource.from_url(url))
+
+    def test_from_url_member_slash(self):
+        class Collection(rest_requests.RestCollection):
+            url_path = 'things'
+
+        id_ = 'important/thing'
+        url = '{}/{}/{}'.format(ROOT, Collection.url_path, quote(id_, safe=''))
+        obj = Collection.from_url(url)
+        self.assertEqual(ROOT, obj.container)
+        self.assertEqual(id_, obj.id)
+
+    def test_from_url_member_invalid_collection(self):
+        class Collection(rest_requests.RestCollection):
+            url_path = 'things'
+
+        url = '{}/x/x'.format(ROOT)
+        self.assertRaises(ValueError, Collection.from_url, url)
 
     def test_id_type_int(self):
         class Collection(rest_requests.RestCollection):
