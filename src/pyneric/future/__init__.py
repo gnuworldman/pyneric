@@ -40,12 +40,14 @@ python_2_unicode_compatible = future.python_2_unicode_compatible
 
 
 _all.add('ensure_text')
-def ensure_text(value, encoding=sys.getdefaultencoding(), errors='strict'):
+def ensure_text(value, encoding=sys.getdefaultencoding(), errors='strict',
+                coerce=False):
     """Return the text representation of the given string.
 
     :param value bytes/str/unicode: string value
     :param encoding str: name of encoding used if `value` is not text
     :param errors str: decode option used if `value` is not text
+    :param bool coerce: whether to attempt to coerce `value` to text
     :returns: text representation of `value`
     :rtype: `unicode` if Python 2; otherwise, `str`
     :raises TypeError: if `value` is not a str, unicode, nor bytes
@@ -59,7 +61,9 @@ def ensure_text(value, encoding=sys.getdefaultencoding(), errors='strict'):
     if isinstance(value, future.native_bytes):
         value = value.decode(encoding, errors)
     elif not isinstance(value, future.text_type):
-        raise TypeError("{!r} is not a string type.".format(type(value)))
+        if not coerce:
+            raise TypeError("{!r} is not a string type.".format(type(value)))
+        value = future.text_type(value)
     return future.native(value)
 
 
