@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric &mdash; pyneric 1.2.1 documentation</title>
+    <title>pyneric &mdash; pyneric 1.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.1 documentation" href="../index.html" />
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../index.html" />
     <link rel="up" title="API" href="../api.html" />
     <link rel="next" title="pyneric.future" href="future.html" />
     <link rel="prev" title="API" href="../api.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,39 +44,39 @@
         <li class="right" >
           <a href="../api.html" title="API"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-pyneric">
 <span id="pyneric"></span><h1>pyneric<a class="headerlink" href="#module-pyneric" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#module-pyneric" title="pyneric"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric</span></tt></a> package contains Python helpers and utility functions.</p>
+<p>The <a class="reference internal" href="#module-pyneric" title="pyneric"><code class="xref py py-obj docutils literal"><span class="pre">pyneric</span></code></a> package contains Python helpers and utility functions.</p>
 <p>For convenience, many of the library&#8217;s components are imported by the
 pyneric package&#8217;s __init__ module so that they may be accessed directly under
 pyneric, such as:</p>
 <ul class="simple">
-<li><a class="reference internal" href="meta.html#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><tt class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></tt></a></li>
-<li><a class="reference internal" href="rest_requests.html#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><tt class="xref py py-obj docutils literal"><span class="pre">RestResource</span></tt></a></li>
-<li><a class="reference internal" href="util.html#pyneric.util.tryf" title="pyneric.util.tryf"><tt class="xref py py-obj docutils literal"><span class="pre">tryf</span></tt></a></li>
+<li><a class="reference internal" href="meta.html#pyneric.meta.Metaclass" title="pyneric.meta.Metaclass"><code class="xref py py-obj docutils literal"><span class="pre">Metaclass</span></code></a></li>
+<li><a class="reference internal" href="rest_requests.html#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><code class="xref py py-obj docutils literal"><span class="pre">RestResource</span></code></a></li>
+<li><a class="reference internal" href="util.html#pyneric.util.tryf" title="pyneric.util.tryf"><code class="xref py py-obj docutils literal"><span class="pre">tryf</span></code></a></li>
 </ul>
 <p>Components (in modules/subpackages) that require extra dependencies should not
-be imported here.  For example <a class="reference internal" href="fsnotify.html#module-pyneric.fsnotify" title="pyneric.fsnotify"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.fsnotify</span></tt></a> depends on <tt class="xref py py-obj docutils literal"><span class="pre">pyinotify</span></tt>, so
-<a class="reference internal" href="fsnotify.html#pyneric.fsnotify.FileSystemNotifier" title="pyneric.fsnotify.FileSystemNotifier"><tt class="xref py py-obj docutils literal"><span class="pre">FileSystemNotifier</span></tt></a> must be imported from that module. If it
+be imported here.  For example <a class="reference internal" href="fsnotify.html#module-pyneric.fsnotify" title="pyneric.fsnotify"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.fsnotify</span></code></a> depends on <code class="xref py py-obj docutils literal"><span class="pre">pyinotify</span></code>, so
+<a class="reference internal" href="fsnotify.html#pyneric.fsnotify.FileSystemNotifier" title="pyneric.fsnotify.FileSystemNotifier"><code class="xref py py-obj docutils literal"><span class="pre">FileSystemNotifier</span></code></a> must be imported from that module. If it
 was imported here, then the library would need to unconditionally require
-<tt class="xref py py-obj docutils literal"><span class="pre">pyinotify</span></tt>, which is not desired.</p>
+<code class="xref py py-obj docutils literal"><span class="pre">pyinotify</span></code>, which is not desired.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="../api.html"
@@ -84,12 +84,14 @@ was imported here, then the library would need to unconditionally require
   <h4>Next topic</h4>
   <p class="topless"><a href="future.html"
                         title="next chapter">pyneric.future</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/api/pyneric.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/pyneric.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -106,7 +108,7 @@ was imported here, then the library would need to unconditionally require
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -121,13 +123,13 @@ was imported here, then the library would need to unconditionally require
         <li class="right" >
           <a href="../api.html" title="API"
              >previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../api.html" >API</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014-2015, Craig Hurd-Rindy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

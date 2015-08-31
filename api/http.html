@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.http &mdash; pyneric 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../index.html" />
+    <link rel="up" title="API" href="../api.html" />
+    <link rel="next" title="pyneric.meta" href="meta.html" />
+    <link rel="prev" title="pyneric.fsnotify" href="fsnotify.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="meta.html" title="pyneric.meta"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fsnotify.html" title="pyneric.fsnotify"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyneric.http">
+<span id="pyneric-http"></span><h1>pyneric.http<a class="headerlink" href="#module-pyneric.http" title="Permalink to this headline">¶</a></h1>
+<p>Representations of HTTP (Hypertext Transport Protocol) standards.</p>
+<p>Each supported version of HTTP is represented in a separate subpackage.</p>
+<div class="section" id="module-pyneric.http.v1_1">
+<span id="v1-1"></span><h2>v1_1<a class="headerlink" href="#module-pyneric.http.v1_1" title="Permalink to this headline">¶</a></h2>
+<p>Represent the Hypertext Transport Protocol version 1.1 standard.</p>
+<p>For convenience, public attributes of the <a class="reference internal" href="#module-pyneric.http.v1_1.core" title="pyneric.http.v1_1.core"><code class="xref py py-obj docutils literal"><span class="pre">core</span></code></a> module are reexposed
+in this module.</p>
+<div class="section" id="module-pyneric.http.v1_1.core">
+<span id="core"></span><h3>core<a class="headerlink" href="#module-pyneric.http.v1_1.core" title="Permalink to this headline">¶</a></h3>
+<p>Represent the Hypertext Transport Protocol 1.1 core standards.</p>
+<p>This package module represents core HTTP, whereas additions and
+extensions are represented in separate modules.</p>
+<p>The standard as implemented in this module is defined in the following
+documents:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc7230">IETF RFC 7230</a></li>
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc7231">IETF RFC 7231</a></li>
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc7232">IETF RFC 7232</a></li>
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc7233">IETF RFC 7233</a></li>
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc7234">IETF RFC 7234</a></li>
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc7235">IETF RFC 7235</a></li>
+</ul>
+<p>This is far from complete and likely never will be, but it may be built
+upon as needs arise.</p>
+<dl class="class">
+<dt id="pyneric.http.v1_1.core.Method">
+<em class="property">class </em><code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">Method</code><span class="sig-paren">(</span><em>token</em>, <em>description</em>, <em>safe</em>, <em>idempotent</em>, <em>cacheable</em><span class="sig-paren">)</span><a class="headerlink" href="#pyneric.http.v1_1.core.Method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a></p>
+<p>Class used to represent an HTTP 1.1 request method.</p>
+<p>See
+<a class="reference external" href="http://tools.ietf.org/html/rfc7231#section-4">Section 4 of RFC 7231</a>
+for details.</p>
+<dl class="attribute">
+<dt id="pyneric.http.v1_1.core.Method.cacheable">
+<code class="descname">cacheable</code><a class="headerlink" href="#pyneric.http.v1_1.core.Method.cacheable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.http.v1_1.core.Method.description">
+<code class="descname">description</code><a class="headerlink" href="#pyneric.http.v1_1.core.Method.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.http.v1_1.core.Method.idempotent">
+<code class="descname">idempotent</code><a class="headerlink" href="#pyneric.http.v1_1.core.Method.idempotent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.http.v1_1.core.Method.safe">
+<code class="descname">safe</code><a class="headerlink" href="#pyneric.http.v1_1.core.Method.safe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.http.v1_1.core.Method.token">
+<code class="descname">token</code><a class="headerlink" href="#pyneric.http.v1_1.core.Method.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.GET">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">GET</code><em class="property"> = Method(token='GET', description='Transfer a current representation of the target resource.', safe=True, idempotent=True, cacheable=True)</em><a class="headerlink" href="#pyneric.http.v1_1.core.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 GET request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.HEAD">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">HEAD</code><em class="property"> = Method(token='HEAD', description='Same as GET, but only transfer the status line and header section.', safe=True, idempotent=True, cacheable=True)</em><a class="headerlink" href="#pyneric.http.v1_1.core.HEAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 HEAD request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.POST">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">POST</code><em class="property"> = Method(token='POST', description='Perform resource-specific processing on the request payload.', safe=False, idempotent=False, cacheable=True)</em><a class="headerlink" href="#pyneric.http.v1_1.core.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 POST request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.PUT">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">PUT</code><em class="property"> = Method(token='PUT', description='Replace all current representations of the target resource with the request payload.', safe=False, idempotent=True, cacheable=False)</em><a class="headerlink" href="#pyneric.http.v1_1.core.PUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 PUT request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.DELETE">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">DELETE</code><em class="property"> = Method(token='DELETE', description='Remove all current representations of the target resource.', safe=False, idempotent=True, cacheable=False)</em><a class="headerlink" href="#pyneric.http.v1_1.core.DELETE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 DELETE request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.CONNECT">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">CONNECT</code><em class="property"> = Method(token='CONNECT', description='Establish a tunnel to the server identified by the target resource.', safe=False, idempotent=False, cacheable=False)</em><a class="headerlink" href="#pyneric.http.v1_1.core.CONNECT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 CONNECT request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.OPTIONS">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">OPTIONS</code><em class="property"> = Method(token='OPTIONS', description='Describe the communication options for the target resource.', safe=True, idempotent=True, cacheable=False)</em><a class="headerlink" href="#pyneric.http.v1_1.core.OPTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 OPTIONS request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.TRACE">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">TRACE</code><em class="property"> = Method(token='TRACE', description='Perform a message loop-back test along the path to the target resource.', safe=True, idempotent=True, cacheable=False)</em><a class="headerlink" href="#pyneric.http.v1_1.core.TRACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 TRACE request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.core.METHODS">
+<code class="descclassname">pyneric.http.v1_1.core.</code><code class="descname">METHODS</code><em class="property"> = {Method(token='GET', description='Transfer a current representation of the target resource.', safe=True, idempotent=True, cacheable=True), Method(token='CONNECT', description='Establish a tunnel to the server identified by the target resource.', safe=False, idempotent=False, cacheable=False), Method(token='PUT', description='Replace all current representations of the target resource with the request payload.', safe=False, idempotent=True, cacheable=False), Method(token='POST', description='Perform resource-specific processing on the request payload.', safe=False, idempotent=False, cacheable=True), Method(token='DELETE', description='Remove all current representations of the target resource.', safe=False, idempotent=True, cacheable=False), Method(token='TRACE', description='Perform a message loop-back test along the path to the target resource.', safe=True, idempotent=True, cacheable=False), Method(token='HEAD', description='Same as GET, but only transfer the status line and header section.', safe=True, idempotent=True, cacheable=True), Method(token='OPTIONS', description='Describe the communication options for the target resource.', safe=True, idempotent=True, cacheable=False)}</em><a class="headerlink" href="#pyneric.http.v1_1.core.METHODS" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of all of the HTTP 1.1 request methods.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyneric.http.v1_1.patch">
+<span id="patch"></span><h3>patch<a class="headerlink" href="#module-pyneric.http.v1_1.patch" title="Permalink to this headline">¶</a></h3>
+<p>Represent the PATCH method for HTTP 1.1.</p>
+<p>The HTTP PATCH method as implemented in this module is defined in the
+following document:</p>
+<p><a class="reference external" href="http://tools.ietf.org/html/rfc5789">IETF RFC 5789</a></p>
+<dl class="data">
+<dt id="pyneric.http.v1_1.patch.PATCH">
+<code class="descclassname">pyneric.http.v1_1.patch.</code><code class="descname">PATCH</code><em class="property"> = Method(token='PATCH', description='Modify the target resource with the request payload.', safe=False, idempotent=False, cacheable=False)</em><a class="headerlink" href="#pyneric.http.v1_1.patch.PATCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 PATCH request method.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyneric.http.v1_1.patch.CACHEABLE_PATCH">
+<code class="descclassname">pyneric.http.v1_1.patch.</code><code class="descname">CACHEABLE_PATCH</code><em class="property"> = Method(token='PATCH', description='Modify the target resource with the request payload.', safe=False, idempotent=False, cacheable=True)</em><a class="headerlink" href="#pyneric.http.v1_1.patch.CACHEABLE_PATCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the HTTP 1.1 cacheable PATCH request method.</p>
+<p>Use this responsibly (pun intended, but also serious).  From the RFC:</p>
+<blockquote>
+<div>A response to this method is only cacheable if it contains explicit
+freshness information (such as an Expires header or
+&#8220;Cache-Control: max-age&#8221; directive) as well as the Content-Location
+header matching the Request-URI, indicating that the PATCH response
+body is a resource representation.  A cached PATCH response can
+only be used to respond to subsequent GET and HEAD requests; it
+MUST NOT be used to respond to other methods (in particular,
+PATCH).</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyneric.http</a><ul>
+<li><a class="reference internal" href="#module-pyneric.http.v1_1">v1_1</a><ul>
+<li><a class="reference internal" href="#module-pyneric.http.v1_1.core">core</a></li>
+<li><a class="reference internal" href="#module-pyneric.http.v1_1.patch">patch</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fsnotify.html"
+                        title="previous chapter">pyneric.fsnotify</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="meta.html"
+                        title="next chapter">pyneric.meta</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/http.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="meta.html" title="pyneric.meta"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fsnotify.html" title="pyneric.fsnotify"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

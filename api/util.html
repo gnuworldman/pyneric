@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.util &mdash; pyneric 1.2.1 documentation</title>
+    <title>pyneric.util &mdash; pyneric 1.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.1 documentation" href="../index.html" />
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../index.html" />
     <link rel="up" title="API" href="../api.html" />
     <link rel="next" title="pyneric.fsnotify" href="fsnotify.html" />
     <link rel="prev" title="pyneric.future" href="future.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,22 +44,22 @@
         <li class="right" >
           <a href="future.html" title="pyneric.future"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-pyneric.util">
 <span id="pyneric-util"></span><h1>pyneric.util<a class="headerlink" href="#module-pyneric.util" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#module-pyneric.util" title="pyneric.util"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.util</span></tt></a> module contains generic utility functions.</p>
+<p>The <a class="reference internal" href="#module-pyneric.util" title="pyneric.util"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.util</span></code></a> module contains generic utility functions.</p>
 <dl class="function">
 <dt id="pyneric.util.add_to_all">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">add_to_all</tt><big>(</big><em>named_object</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#add_to_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.add_to_all" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">add_to_all</code><span class="sig-paren">(</span><em>named_object</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#add_to_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.add_to_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add the name of the given object to its module&#8217;s <em>__all__</em> attribute.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -70,8 +70,8 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><em>named_object</em> (unchanged)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Raises <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.4)">TypeError</a>:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if the <em>__all__</em> attribute of <tt class="xref py py-obj docutils literal"><span class="pre">named_object</span></tt>&#8216;s module is
-not a <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a>, <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a>, or <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">tuple</span></tt></a></td>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if the <em>__all__</em> attribute of <code class="xref py py-obj docutils literal"><span class="pre">named_object</span></code>&#8216;s module is
+not a <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a>, <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a>, or <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -79,7 +79,7 @@ not a <a class="reference external" href="http://docs.python.org/3/library/stdty
 attribute (such as functions and classes) defined in a module&#8217;s global
 namespace.</p>
 <p>The applicable module is determined by passing <em>named_object</em> to
-<a class="reference external" href="http://docs.python.org/3/library/inspect.html#inspect.getmodule" title="(in Python v3.4)"><tt class="xref py py-func docutils literal"><span class="pre">inspect.getmodule()</span></tt></a>.  It is not recommended to pass an object that is
+<a class="reference external" href="http://docs.python.org/3/library/inspect.html#inspect.getmodule" title="(in Python v3.4)"><code class="xref py py-func docutils literal"><span class="pre">inspect.getmodule()</span></code></a>.  It is not recommended to pass an object that is
 not in the module&#8217;s global namespace.  Passing an imported object attempts
 to add the name to the <em>__all__</em> attribute of the module in which the
 object was defined (also not recommended).</p>
@@ -87,7 +87,7 @@ object was defined (also not recommended).</p>
 
 <dl class="function">
 <dt id="pyneric.util.get_from_dict_or_objects">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">get_from_dict_or_objects</tt><big>(</big><em>name</em>, <em>dict</em>, <em>objects</em>, <em>pop_from_dict=False</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#get_from_dict_or_objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.get_from_dict_or_objects" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">get_from_dict_or_objects</code><span class="sig-paren">(</span><em>name</em>, <em>dict</em>, <em>objects</em>, <em>pop_from_dict=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#get_from_dict_or_objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.get_from_dict_or_objects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempt to get a value via name from a mapping then from objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -96,9 +96,9 @@ object was defined (also not recommended).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><em>str</em></a>) &#8211; the name for which to look</li>
 <li><strong>dict</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.4)"><em>dict</em></a>) &#8211; the mapping in which to look first (by key)</li>
-<li><strong>objects</strong> (sequence of <a class="reference external" href="http://docs.python.org/3/library/functions.html#object" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">object</span></tt></a>s) &#8211; the objects in which to look after <em>dict</em> (by attribute)</li>
-<li><strong>pop_from_dict</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><em>bool</em></a>) &#8211; whether to <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict.pop" title="(in Python v3.4)"><tt class="xref py py-meth docutils literal"><span class="pre">pop()</span></tt></a> rather than
-<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict.get" title="(in Python v3.4)"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> from <em>dict</em></li>
+<li><strong>objects</strong> (sequence of <a class="reference external" href="http://docs.python.org/3/library/functions.html#object" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">object</span></code></a>s) &#8211; the objects in which to look after <em>dict</em> (by attribute)</li>
+<li><strong>pop_from_dict</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><em>bool</em></a>) &#8211; whether to <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict.pop" title="(in Python v3.4)"><code class="xref py py-meth docutils literal"><span class="pre">pop()</span></code></a> rather than
+<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#dict.get" title="(in Python v3.4)"><code class="xref py py-meth docutils literal"><span class="pre">get()</span></code></a> from <em>dict</em></li>
 </ul>
 </td>
 </tr>
@@ -116,7 +116,7 @@ contain any such attribute</p>
 
 <dl class="function">
 <dt id="pyneric.util.get_function_name">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">get_function_name</tt><big>(</big><em>back=0</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#get_function_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.get_function_name" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">get_function_name</code><span class="sig-paren">(</span><em>back=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#get_function_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.get_function_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the name of a function in the stack.</p>
 <p>By default (no arguments) the name of the caller of this function is
 returned, but the name of a function further back in the stack can be
@@ -128,7 +128,7 @@ returned by specifying a positive integer indicating how many frames.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>back</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#int" title="(in Python v3.4)"><em>int</em></a>) &#8211; the number of frames beyond the caller to go back</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.4)">IndexError</a>:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if <tt class="xref py py-obj docutils literal"><span class="pre">back</span></tt> is too high for the stack</td>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if <code class="xref py py-obj docutils literal"><span class="pre">back</span></code> is too high for the stack</td>
 </tr>
 </tbody>
 </table>
@@ -136,7 +136,7 @@ returned by specifying a positive integer indicating how many frames.</p>
 
 <dl class="function">
 <dt id="pyneric.util.module_attributes">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">module_attributes</tt><big>(</big><em>module</em>, <em>use_all=None</em>, <em>include_underscored=False</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#module_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.module_attributes" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">module_attributes</code><span class="sig-paren">(</span><em>module</em>, <em>use_all=None</em>, <em>include_underscored=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#module_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.module_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a set of the attribute names in the given module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -145,14 +145,14 @@ returned by specifying a positive integer indicating how many frames.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>module</strong> (<em>module</em>) &#8211; the module from which to get the attribute names</li>
 <li><strong>use_all</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><em>bool</em></a>) &#8211; whether to find attribute names from the module&#8217;s
-<em>__all__</em> attribute (<a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a> means only if it exists)</li>
+<em>__all__</em> attribute (<a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> means only if it exists)</li>
 <li><strong>include_underscored</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><em>bool</em></a>) &#8211; whether to include attribute names that
 begin with an underscore when the
 <em>__all__</em> attribute is not used</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a></p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a></p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Raises <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.4)">AttributeError</a>:</th></tr>
@@ -163,15 +163,15 @@ attribute</p>
 </tbody>
 </table>
 <p>When the attribute names are not gotten from the module&#8217;s <em>__all__</em>
-attribute, then the module is passed to <a class="reference external" href="http://docs.python.org/3/library/functions.html#dir" title="(in Python v3.4)"><tt class="xref py py-func docutils literal"><span class="pre">dir()</span></tt></a> to get the names.</p>
-<p>Passing a true value for <tt class="xref py py-obj docutils literal"><span class="pre">use_all</span></tt> is a convenience for the caller when it
+attribute, then the module is passed to <a class="reference external" href="http://docs.python.org/3/library/functions.html#dir" title="(in Python v3.4)"><code class="xref py py-func docutils literal"><span class="pre">dir()</span></code></a> to get the names.</p>
+<p>Passing a true value for <code class="xref py py-obj docutils literal"><span class="pre">use_all</span></code> is a convenience for the caller when it
 requires that the module shall have an <em>__all__</em> attribute and an exception
 shall be raised if it does not.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyneric.util.pascalize">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">pascalize</tt><big>(</big><em>value</em>, <em>validate=True</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#pascalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.pascalize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">pascalize</code><span class="sig-paren">(</span><em>value</em>, <em>validate=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#pascalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.pascalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the conversion of the given string value to Pascal casing.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -184,7 +184,7 @@ Python identifier</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
@@ -201,8 +201,8 @@ without the underscore.</p>
 
 <dl class="function">
 <dt id="pyneric.util.raise_attribute_error">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">raise_attribute_error</tt><big>(</big><em>obj</em>, <em>attr</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#raise_attribute_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.raise_attribute_error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raise an instance of <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">AttributeError</span></tt></a> with the standard message.</p>
+<code class="descclassname">pyneric.util.</code><code class="descname">raise_attribute_error</code><span class="sig-paren">(</span><em>obj</em>, <em>attr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#raise_attribute_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.raise_attribute_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an instance of <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">AttributeError</span></code></a> with the standard message.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -223,7 +223,7 @@ without the underscore.</p>
 
 <dl class="function">
 <dt id="pyneric.util.tryf">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">tryf</tt><big>(</big><em>func</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#tryf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.tryf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">tryf</code><span class="sig-paren">(</span><em>func</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#tryf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.tryf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap a function call in a try/except statement.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -233,7 +233,7 @@ without the underscore.</p>
 <li><strong>func</strong> (<em>function</em>) &#8211; the function to call</li>
 <li><strong>args</strong> &#8211; the positional arguments to pass to <em>func</em></li>
 <li><strong>kwargs</strong> &#8211; the keyword arguments to pass to <em>func</em></li>
-<li><strong>_except</strong> (<a class="reference external" href="http://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">BaseException</span></tt></a> or sequence of such) &#8211; the exception(s) to catch</li>
+<li><strong>_except</strong> (<a class="reference external" href="http://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">BaseException</span></code></a> or sequence of such) &#8211; the exception(s) to catch</li>
 <li><strong>_return</strong> &#8211; the value to return if calling <em>func</em> raises <em>_except</em></li>
 </ul>
 </td>
@@ -247,7 +247,7 @@ of this function.</p>
 
 <dl class="function">
 <dt id="pyneric.util.underscore">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">underscore</tt><big>(</big><em>value</em>, <em>validate=True</em>, <em>multicap=True</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#underscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.underscore" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">underscore</code><span class="sig-paren">(</span><em>value</em>, <em>validate=True</em>, <em>multicap=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#underscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.underscore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the conversion of the given string value to variable casing.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -263,7 +263,7 @@ followed by lower is encountered</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
@@ -289,7 +289,7 @@ unless it is the first character.</p>
 
 <dl class="function">
 <dt id="pyneric.util.valid_python_identifier">
-<tt class="descclassname">pyneric.util.</tt><tt class="descname">valid_python_identifier</tt><big>(</big><em>value</em>, <em>dotted=False</em>, <em>exception=False</em><big>)</big><a class="reference internal" href="../_modules/pyneric/util.html#valid_python_identifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.valid_python_identifier" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyneric.util.</code><code class="descname">valid_python_identifier</code><span class="sig-paren">(</span><em>value</em>, <em>dotted=False</em>, <em>exception=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/util.html#valid_python_identifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.util.valid_python_identifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate that the given string value is a valid Python identifier.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -298,14 +298,14 @@ unless it is the first character.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>value</strong> (<a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><em>str</em></a>) &#8211; the identifier to validate</li>
 <li><strong>dotted</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><em>bool</em></a>) &#8211; if true, then each string around any dots is validated</li>
-<li><strong>exception</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a> or <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">BaseException</span></tt></a>) &#8211; whether to raise an exception (see raises)</li>
+<li><strong>exception</strong> (<a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a> or <a class="reference external" href="http://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">BaseException</span></code></a>) &#8211; whether to raise an exception (see raises)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">whether <em>value</em> is a valid non-keyword Python identifier</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/3/library/functions.html#bool" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">bool</span></code></a></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
@@ -324,7 +324,7 @@ unless it is the first character.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="future.html"
@@ -332,12 +332,14 @@ unless it is the first character.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fsnotify.html"
                         title="next chapter">pyneric.fsnotify</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/api/util.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/util.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -354,7 +356,7 @@ unless it is the first character.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -369,13 +371,13 @@ unless it is the first character.</p>
         <li class="right" >
           <a href="future.html" title="pyneric.future"
              >previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../api.html" >API</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014-2015, Craig Hurd-Rindy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

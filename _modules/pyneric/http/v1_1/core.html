@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyneric.http.v1_1.core &mdash; pyneric 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyneric.http.v1_1.core</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Represent the Hypertext Transport Protocol 1.1 core standards.</span>
+
+<span class="sd">This package module represents core HTTP, whereas additions and</span>
+<span class="sd">extensions are represented in separate modules.</span>
+
+<span class="sd">The standard as implemented in this module is defined in the following</span>
+<span class="sd">documents:</span>
+
+<span class="sd">* `IETF RFC 7230 &lt;http://tools.ietf.org/html/rfc7230&gt;`_</span>
+<span class="sd">* `IETF RFC 7231 &lt;http://tools.ietf.org/html/rfc7231&gt;`_</span>
+<span class="sd">* `IETF RFC 7232 &lt;http://tools.ietf.org/html/rfc7232&gt;`_</span>
+<span class="sd">* `IETF RFC 7233 &lt;http://tools.ietf.org/html/rfc7233&gt;`_</span>
+<span class="sd">* `IETF RFC 7234 &lt;http://tools.ietf.org/html/rfc7234&gt;`_</span>
+<span class="sd">* `IETF RFC 7235 &lt;http://tools.ietf.org/html/rfc7235&gt;`_</span>
+
+<span class="sd">This is far from complete and likely never will be, but it may be built</span>
+<span class="sd">upon as needs arise.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># Support Python 2 &amp; 3.</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+                        <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyneric.future</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+
+<span class="n">Method</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;Method&#39;</span><span class="p">,</span> <span class="s">&#39;token description safe idempotent cacheable&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Class used to represent an HTTP 1.1 request method.</span>
+
+<span class="sd">See</span>
+<span class="sd">`Section 4 of RFC 7231 &lt;http://tools.ietf.org/html/rfc7231#section-4&gt;`_</span>
+<span class="sd">for details.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="n">GET</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;GET&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Transfer a current representation of the target resource.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 GET request method.&quot;&quot;&quot;</span>
+
+<span class="n">HEAD</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;HEAD&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Same as GET, but only transfer the status line and header section.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 HEAD request method.&quot;&quot;&quot;</span>
+
+<span class="n">POST</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;POST&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Perform resource-specific processing on the request payload.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 POST request method.&quot;&quot;&quot;</span>
+
+<span class="n">PUT</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;PUT&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Replace all current representations of the target resource with the &quot;</span>
+    <span class="s">&quot;request payload.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 PUT request method.&quot;&quot;&quot;</span>
+
+<span class="n">DELETE</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;DELETE&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Remove all current representations of the target resource.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 DELETE request method.&quot;&quot;&quot;</span>
+
+<span class="n">CONNECT</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;CONNECT&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Establish a tunnel to the server identified by the target resource.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 CONNECT request method.&quot;&quot;&quot;</span>
+
+<span class="n">OPTIONS</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;OPTIONS&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Describe the communication options for the target resource.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 OPTIONS request method.&quot;&quot;&quot;</span>
+
+<span class="n">TRACE</span> <span class="o">=</span> <span class="n">Method</span><span class="p">(</span>
+    <span class="s">&#39;TRACE&#39;</span><span class="p">,</span>
+    <span class="s">&quot;Perform a message loop-back test along the path to the target resource.&quot;</span><span class="p">,</span>
+    <span class="n">safe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">idempotent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">cacheable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Representation of the HTTP 1.1 TRACE request method.&quot;&quot;&quot;</span>
+
+<span class="n">METHODS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span>
+    <span class="n">GET</span><span class="p">,</span>
+    <span class="n">HEAD</span><span class="p">,</span>
+    <span class="n">POST</span><span class="p">,</span>
+    <span class="n">PUT</span><span class="p">,</span>
+    <span class="n">DELETE</span><span class="p">,</span>
+    <span class="n">CONNECT</span><span class="p">,</span>
+    <span class="n">OPTIONS</span><span class="p">,</span>
+    <span class="n">TRACE</span><span class="p">,</span>
+<span class="p">))</span>
+<span class="sd">&quot;&quot;&quot;A set of all of the HTTP 1.1 request methods.&quot;&quot;&quot;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

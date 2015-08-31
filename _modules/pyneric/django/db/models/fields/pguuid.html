@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.django.db.models.fields.pguuid &mdash; pyneric 1.2.1 documentation</title>
+    <title>pyneric.django.db.models.fields.pguuid &mdash; pyneric 1.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../../../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../../../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,11 @@
     <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.1 documentation" href="../../../../../../index.html" />
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../../../../../../index.html" />
     <link rel="up" title="Module code" href="../../../../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,15 +36,15 @@
         <li class="right" >
           <a href="../../../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../../../../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for pyneric.django.db.models.fields.pguuid</h1><div class="highlight"><pre>
 <span class="c"># -*- coding: utf-8 -*-</span>
@@ -64,9 +64,13 @@
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">VERSION</span> <span class="k">as</span> <span class="n">DJANGO_VERSION</span>
 <span class="kn">from</span> <span class="nn">django.db.models.fields</span> <span class="kn">import</span> <span class="n">AutoField</span><span class="p">,</span> <span class="n">Field</span>
 <span class="kn">from</span> <span class="nn">django.db.models.fields.related</span> <span class="kn">import</span> <span class="n">ForeignKey</span>
-<span class="kn">from</span> <span class="nn">django_extensions.db.fields</span> <span class="kn">import</span> <span class="n">PostgreSQLUUIDField</span>
+<span class="k">if</span> <span class="n">DJANGO_VERSION</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="kn">from</span> <span class="nn">django_extensions.db.fields</span> <span class="kn">import</span> <span class="n">PostgreSQLUUIDField</span> <span class="k">as</span> <span class="n">UUIDField</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
+    <span class="kn">from</span> <span class="nn">django.db.models.fields</span> <span class="kn">import</span> <span class="n">UUIDField</span>
 
 <span class="kn">from</span> <span class="nn">pyneric.util</span> <span class="kn">import</span> <span class="n">add_to_all</span>
 
@@ -93,10 +97,13 @@
 
 
 <span class="nd">@add_to_all</span>
-<div class="viewcode-block" id="AutoPgUuidField"><a class="viewcode-back" href="../../../../../../api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField">[docs]</a><span class="k">class</span> <span class="nc">AutoPgUuidField</span><span class="p">(</span><span class="n">PostgreSQLUUIDField</span><span class="p">,</span> <span class="n">AutoField</span><span class="p">):</span>
+<div class="viewcode-block" id="AutoPgUuidField"><a class="viewcode-back" href="../../../../../../api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField">[docs]</a><span class="k">class</span> <span class="nc">AutoPgUuidField</span><span class="p">(</span><span class="n">UUIDField</span><span class="p">,</span> <span class="n">AutoField</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;A `PostgreSQLUUIDField` that is also an</span>
-<span class="sd">    `~django:django.db.models.AutoField`.</span>
+    <span class="sd">&quot;&quot;&quot;A `UUIDField` that is also an `~django:django.db.models.AutoField`.</span>
+
+<span class="sd">    In Django 1.8, this is a real UUID field; earlier versions are supported</span>
+<span class="sd">    by django-extensions&#39; PostgreSQLUUIDField, which stores real UUIDs, but</span>
+<span class="sd">    exposes them in Python as a CharField.</span>
 
 <span class="sd">    The generation of the UUID value in the database must be set up manually</span>
 <span class="sd">    (via a migration or another mechanism).  Django 1.7 migration example::</span>
@@ -122,9 +129,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../../../../search.html" method="get">
       <input type="text" name="q" />
@@ -141,7 +148,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -150,13 +157,13 @@
         <li class="right" >
           <a href="../../../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../../../../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../../../../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014-2015, Craig Hurd-Rindy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

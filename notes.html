@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Release Notes &mdash; pyneric 1.2.1 documentation</title>
+    <title>Release Notes &mdash; pyneric 1.3.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.1 documentation" href="index.html" />
+    <link rel="top" title="pyneric 1.3.0 documentation" href="index.html" />
     <link rel="prev" title="Examples" href="examples.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,36 +39,55 @@
         <li class="right" >
           <a href="examples.html" title="Examples"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">pyneric 1.2.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyneric 1.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-3-0">
+<h2>Version 1.3.0<a class="headerlink" href="#version-1-3-0" title="Permalink to this headline">¶</a></h2>
+<p>Fix URL-quoting in <a class="reference internal" href="api/rest_requests.html#module-pyneric.rest_requests" title="pyneric.rest_requests"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.rest_requests</span></code></a> (issue #7), which might cause errors
+with callers who were working around the bug by providing URL-quoted values
+where that should not have been necessary.  Remove the URL-quoting of values
+provided to these classes that are used as segments of URLs prior to upgrading.
+Actual URLs (such as the <code class="xref py py-obj docutils literal"><span class="pre">container</span></code> argument passed to the
+<a class="reference internal" href="api/rest_requests.html#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><code class="xref py py-class docutils literal"><span class="pre">RestResource</span></code></a> constructor) should remain
+URL-quoted.</p>
+<p>Add the <a class="reference internal" href="api/requests.html#module-pyneric.requests" title="pyneric.requests"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.requests</span></code></a> module, which includes the new
+<a class="reference internal" href="api/requests.html#pyneric.requests.RequestHandler" title="pyneric.requests.RequestHandler"><code class="xref py py-obj docutils literal"><span class="pre">RequestHandler</span></code></a> class.</p>
+<p>Fix a Python 2.6 incompatibility in <a class="reference internal" href="api/future.html#module-pyneric.future" title="pyneric.future"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.future</span></code></a>.  Note that Python 2.6 is
+still not officially supported.</p>
+<p>Deprecate <a class="reference internal" href="api/future.html#pyneric.future.python_2_unicode_compatible" title="pyneric.future.python_2_unicode_compatible"><code class="xref py py-func docutils literal"><span class="pre">pyneric.future.python_2_unicode_compatible()</span></code></a>, since it is now
+the same implementation as the one in <code class="xref py py-obj docutils literal"><span class="pre">future.utils</span></code>.</p>
+<p>Fix a bug in <a class="reference internal" href="api/rest_requests.html#pyneric.rest_requests.RestResource.from_url" title="pyneric.rest_requests.RestResource.from_url"><code class="xref py py-meth docutils literal"><span class="pre">pyneric.rest_requests.RestResource.from_url()</span></code></a> that made it
+fail to work correctly with resources that have a trailing slash in
+<a class="reference internal" href="api/rest_requests.html#pyneric.rest_requests.RestResource.url_path" title="pyneric.rest_requests.RestResource.url_path"><code class="xref py py-attr docutils literal"><span class="pre">url_path</span></code></a>.</p>
+</div>
 <div class="section" id="version-1-2-1">
 <h2>Version 1.2.1<a class="headerlink" href="#version-1-2-1" title="Permalink to this headline">¶</a></h2>
-<p>Allow APIs that utilize trailing slashes in <a class="reference internal" href="api/rest_requests.html#module-pyneric.rest_requests" title="pyneric.rest_requests"><tt class="xref py py-obj docutils literal"><span class="pre">rest_requests</span></tt></a>.  Specify
+<p>Allow APIs that utilize trailing slashes in <a class="reference internal" href="api/rest_requests.html#module-pyneric.rest_requests" title="pyneric.rest_requests"><code class="xref py py-obj docutils literal"><span class="pre">rest_requests</span></code></a>.  Specify
 a container with a trailing slash to make all resources under it have a
 trailing slash.</p>
 </div>
 <div class="section" id="version-1-2">
 <h2>Version 1.2<a class="headerlink" href="#version-1-2" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField" title="pyneric.django.db.models.fields.pguuid.AutoPgUuidField"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.django.db.models.fields.pguuid.AutoPgUuidField</span></tt></a> is new and is the
+<p><a class="reference internal" href="api/django.html#pyneric.django.db.models.fields.pguuid.AutoPgUuidField" title="pyneric.django.db.models.fields.pguuid.AutoPgUuidField"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.django.db.models.fields.pguuid.AutoPgUuidField</span></code></a> is new and is the
 first Django extension in the library.  It is an optional feature, which can be
 made a requirement in a project by specifying &#8220;pyneric[django-pguuid]&#8221; as a
-requirement.  See the documentation for more details and <tt class="xref py py-obj docutils literal"><span class="pre">django_test_app</span></tt>
-under the <tt class="xref py py-obj docutils literal"><span class="pre">tests</span></tt> directory for an example.</p>
+requirement.  See the documentation for more details and <code class="xref py py-obj docutils literal"><span class="pre">django_test_app</span></code>
+under the <code class="xref py py-obj docutils literal"><span class="pre">tests</span></code> directory for an example.</p>
 </div>
 <div class="section" id="version-1-1-1">
 <h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api/meta.html#pyneric.meta.MetadataBehaviour" title="pyneric.meta.MetadataBehaviour"><tt class="xref py py-obj docutils literal"><span class="pre">MetadataBehaviour</span></tt></a> now takes a <tt class="xref py py-obj docutils literal"><span class="pre">validate_transforms</span></tt> argument
+<p><a class="reference internal" href="api/meta.html#pyneric.meta.MetadataBehaviour" title="pyneric.meta.MetadataBehaviour"><code class="xref py py-obj docutils literal"><span class="pre">MetadataBehaviour</span></code></a> now takes a <code class="xref py py-obj docutils literal"><span class="pre">validate_transforms</span></code> argument
 that (if set to true) will make validation methods (those that match the
-concatenation of <tt class="xref py py-obj docutils literal"><span class="pre">validate_prefix</span></tt> and a metadata field name) also transform
+concatenation of <code class="xref py py-obj docutils literal"><span class="pre">validate_prefix</span></code> and a metadata field name) also transform
 the metadata value; that is, whatever the method returns is what the value
 becomes.</p>
 </div>
@@ -77,7 +96,7 @@ becomes.</p>
 <p>The get_function_name utility function is new.</p>
 <p>Optional (extra) requirements &#8220;pyinotify&#8221; and &#8220;requests&#8221; are now truly
 optional; details are below.</p>
-<p><tt class="xref py py-obj docutils literal"><span class="pre">FileSystemNotifier</span></tt> is no longer imported into the base package because it has
+<p><code class="xref py py-obj docutils literal"><span class="pre">FileSystemNotifier</span></code> is no longer imported into the base package because it has
 a requirement that is optional/extra for the library.  The name for the extra
 feature has been changed from &#8220;FileSystemNotifier&#8221; to &#8220;fsnotify&#8221;.</p>
 <p>The &#8220;requests&#8221; extra feature name is new, and a project should require it if it
@@ -107,11 +126,12 @@ extensions and fixes for using the future library.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-1-3-0">Version 1.3.0</a></li>
 <li><a class="reference internal" href="#version-1-2-1">Version 1.2.1</a></li>
 <li><a class="reference internal" href="#version-1-2">Version 1.2</a></li>
 <li><a class="reference internal" href="#version-1-1-1">Version 1.1.1</a></li>
@@ -126,12 +146,14 @@ extensions and fixes for using the future library.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="examples.html"
                         title="previous chapter">Examples</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/notes.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/notes.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -148,7 +170,7 @@ extensions and fixes for using the future library.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -160,12 +182,12 @@ extensions and fixes for using the future library.</p>
         <li class="right" >
           <a href="examples.html" title="Examples"
              >previous</a> |</li>
-        <li><a href="index.html">pyneric 1.2.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyneric 1.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014-2015, Craig Hurd-Rindy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

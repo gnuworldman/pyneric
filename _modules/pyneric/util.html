@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.util &mdash; pyneric 1.2.1 documentation</title>
+    <title>pyneric.util &mdash; pyneric 1.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,11 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.1 documentation" href="../../index.html" />
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,15 +36,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for pyneric.util</h1><div class="highlight"><pre>
 <span class="c"># -*- coding: utf-8 -*-</span>
@@ -187,11 +187,11 @@
 <span class="sd">    without the underscore.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
         <span class="n">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{!r} is not a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-    <span class="n">result_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">ensure_text</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;(?:^|_)(.)&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">value</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">result_type</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">result_type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -267,16 +267,16 @@
 <span class="sd">    &#39;a_b_c_def_g_hij_k_l_m_n_o_pqrs&#39;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
         <span class="n">valid_python_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{!r} is not a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">ensure_text</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;[A-Z]&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">multicap</span><span class="p">:</span>
         <span class="n">patterns</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;[A-Z]+(?=($|[A-Z][a-z]))&#39;</span><span class="p">)</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">x</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">value</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
-    <span class="n">result_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">result_type</span><span class="p">:</span>  <span class="c"># pragma: no cover</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">result_type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span>
@@ -296,8 +296,8 @@
 <span class="sd">    :raises ValueError: if *exception* is true and validation fails</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{!r} is not a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">original_value</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">ensure_text</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dotted</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">valid_python_identifier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="n">exception</span><span class="p">)</span>
                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">))</span>
@@ -311,15 +311,15 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span> <span class="ow">and</span>
             <span class="nb">issubclass</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)):</span>
         <span class="n">exception</span> <span class="o">=</span> <span class="ne">ValueError</span>
-    <span class="k">raise</span> <span class="n">exception</span><span class="p">(</span><span class="s">&quot;{!r} {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">problem</span><span class="p">))</span></div>
+    <span class="k">raise</span> <span class="n">exception</span><span class="p">(</span><span class="s">&quot;{!r} {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">original_value</span><span class="p">,</span> <span class="n">problem</span><span class="p">))</span></div>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -336,7 +336,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -345,13 +345,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014-2015, Craig Hurd-Rindy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

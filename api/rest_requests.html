@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyneric.rest_requests &mdash; pyneric 1.2.1 documentation</title>
+    <title>pyneric.rest_requests &mdash; pyneric 1.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="pyneric 1.2.1 documentation" href="../index.html" />
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../index.html" />
     <link rel="up" title="API" href="../api.html" />
     <link rel="next" title="pyneric.django" href="django.html" />
-    <link rel="prev" title="pyneric.meta" href="meta.html" /> 
+    <link rel="prev" title="pyneric.requests" href="requests.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -42,62 +42,67 @@
           <a href="django.html" title="pyneric.django"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="meta.html" title="pyneric.meta"
+          <a href="requests.html" title="pyneric.requests"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-pyneric.rest_requests">
 <span id="pyneric-rest-requests"></span><h1>pyneric.rest_requests<a class="headerlink" href="#module-pyneric.rest_requests" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#module-pyneric.rest_requests" title="pyneric.rest_requests"><tt class="xref py py-obj docutils literal"><span class="pre">pyneric.rest_requests</span></tt></a> module contains REST resource classes.</p>
+<p>The <a class="reference internal" href="#module-pyneric.rest_requests" title="pyneric.rest_requests"><code class="xref py py-obj docutils literal"><span class="pre">pyneric.rest_requests</span></code></a> module contains REST resource classes.</p>
 <dl class="class">
 <dt id="pyneric.rest_requests.RestResource">
-<em class="property">class </em><tt class="descclassname">pyneric.rest_requests.</tt><tt class="descname">RestResource</tt><big>(</big><em>container</em><big>)</big><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<em class="property">class </em><code class="descclassname">pyneric.rest_requests.</code><code class="descname">RestResource</code><span class="sig-paren">(</span><em>container</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/3/library/functions.html#object" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>A standard REST resource.</p>
 <p>A REST resource is represented by a (usually HTTP) URL, which is specified
-in this class via the combination of the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><tt class="xref py py-obj docutils literal"><span class="pre">container</span></tt></a> passed to the
-constructor and the <a class="reference internal" href="#pyneric.rest_requests.RestResource.url_path" title="pyneric.rest_requests.RestResource.url_path"><tt class="xref py py-attr docutils literal"><span class="pre">url_path</span></tt></a>.  See the attribute documentation for
+in this class via the combination of the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><code class="xref py py-obj docutils literal"><span class="pre">container</span></code></a> passed to the
+constructor and the <a class="reference internal" href="#pyneric.rest_requests.RestResource.url_path" title="pyneric.rest_requests.RestResource.url_path"><code class="xref py py-attr docutils literal"><span class="pre">url_path</span></code></a>.  See the attribute documentation for
 more details.</p>
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.url_path">
-<tt class="descname">url_path</tt><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.url_path" title="Permalink to this definition">¶</a></dt>
+<code class="descname">url_path</code><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.url_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path segment(s) identifying the REST resource.</p>
-<p>This may be <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a> to signify that this is an abstract resource; otherwise,
+<p>This may be <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> to signify that this is an abstract resource; otherwise,
 it is the path under the base (API root or containing resource) identifying
-this resource.</p>
+this resource, which will be automatically URL-quoted (except for path
+separators) when it is included in a URL produced by the library.</p>
 <p>This may contain path separator(s) (&#8220;/&#8221;) if there is no need to access the
 path segments as distinct REST resources.</p>
 <p>This cannot start with a path separator, but it may end with one if this
 and resources under this one (i.e., those that use this one as container)
-shall have trailing slashes.  This has no effect if the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><tt class="xref py py-obj docutils literal"><span class="pre">container</span></tt></a> has a
-trailing slash.</p>
+shall each have a trailing path separator.  If the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><code class="xref py py-obj docutils literal"><span class="pre">container</span></code></a> passed to
+the constructor is a URL string with a trailing slash or a
+<a class="reference internal" href="#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><code class="xref py py-class docutils literal"><span class="pre">RestResource</span></code></a> with a <a class="reference internal" href="#pyneric.rest_requests.RestResource.url_path" title="pyneric.rest_requests.RestResource.url_path"><code class="xref py py-obj docutils literal"><span class="pre">url_path</span></code></a> ending with a path separator, then
+it is not significant whether this value has a trailing path separator,
+since all resources under that container are represented with a trailing
+path separator.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.container_class">
-<tt class="descname">container_class</tt><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.container_class" title="Permalink to this definition">¶</a></dt>
+<code class="descname">container_class</code><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.container_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>The parent REST resource that contains this resource.</p>
-<p>The <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><tt class="xref py py-obj docutils literal"><span class="pre">container</span></tt></a> passed to the constructor must be an instance of this
-resource.  If this is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>, then the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><tt class="xref py py-obj docutils literal"><span class="pre">container</span></tt></a> passed to the
+<p>The <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><code class="xref py py-obj docutils literal"><span class="pre">container</span></code></a> passed to the constructor must be an instance of this
+resource.  If this is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>, then the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><code class="xref py py-obj docutils literal"><span class="pre">container</span></code></a> passed to the
 constructor must be a URL string under which this resource resides.</p>
 <p>An attribute named after this class or explicitly named by this class is
-created to reference the instance passed to the constructor as <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><tt class="xref py py-obj docutils literal"><span class="pre">container</span></tt></a>.</p>
+created to reference the instance passed to the constructor as <a class="reference internal" href="#pyneric.rest_requests.RestResource.container" title="pyneric.rest_requests.RestResource.container"><code class="xref py py-obj docutils literal"><span class="pre">container</span></code></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.container_is_collection">
-<tt class="descname">container_is_collection</tt><em class="property"> = False</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.container_is_collection" title="Permalink to this definition">¶</a></dt>
+<code class="descname">container_is_collection</code><em class="property"> = False</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.container_is_collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether the containing resource is the specified collection.</p>
-<p>This only applies when the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container_class" title="pyneric.rest_requests.RestResource.container_class"><tt class="xref py py-attr docutils literal"><span class="pre">container_class</span></tt></a> is a subclass of
-<a class="reference internal" href="#pyneric.rest_requests.RestCollection" title="pyneric.rest_requests.RestCollection"><tt class="xref py py-obj docutils literal"><span class="pre">RestCollection</span></tt></a>; it is simply a convenience for automatically confirming
+<p>This only applies when the <a class="reference internal" href="#pyneric.rest_requests.RestResource.container_class" title="pyneric.rest_requests.RestResource.container_class"><code class="xref py py-attr docutils literal"><span class="pre">container_class</span></code></a> is a subclass of
+<a class="reference internal" href="#pyneric.rest_requests.RestCollection" title="pyneric.rest_requests.RestCollection"><code class="xref py py-obj docutils literal"><span class="pre">RestCollection</span></code></a>; it is simply a convenience for automatically confirming
 the resource&#8217;s validity within the REST API.</p>
 <p>If this is false, then this resource exists under each member of the
 collection; otherwise, it exists directly under the collection itself.</p>
@@ -105,11 +110,11 @@ collection; otherwise, it exists directly under the collection itself.</p>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.reference_attribute">
-<tt class="descname">reference_attribute</tt><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.reference_attribute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reference_attribute</code><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.reference_attribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>The attribute name used to refer to this resource.</p>
 <p>For example, this applies when another resource refers to this one as the
 container.</p>
-<p>If this is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a> (the default), then the attribute used to refer to this
+<p>If this is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> (the default), then the attribute used to refer to this
 resource (as container) is the class name converted to lower-case and
 underscored (with additional underscore(s) appended when it would conflict
 with existing attributes in the referring resource).</p>
@@ -117,96 +122,107 @@ with existing attributes in the referring resource).</p>
 
 <dl class="classmethod">
 <dt id="pyneric.rest_requests.RestResource.from_url">
-<em class="property">classmethod </em><tt class="descname">from_url</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestResource.from_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestResource.from_url" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">from_url</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestResource.from_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestResource.from_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct an instance of this resource based on the given URL.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.container">
-<tt class="descname">container</tt><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestResource.container"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestResource.container" title="Permalink to this definition">¶</a></dt>
+<code class="descname">container</code><a class="headerlink" href="#pyneric.rest_requests.RestResource.container" title="Permalink to this definition">¶</a></dt>
 <dd><p>The container of this resource.</p>
-<p>This is an instance of <a class="reference internal" href="#pyneric.rest_requests.RestResource.container_class" title="pyneric.rest_requests.RestResource.container_class"><tt class="xref py py-attr docutils literal"><span class="pre">container_class</span></tt></a> if that is not <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>;
-otherwise, this is the REST URL under which this resource resides.</p>
+<p>This is an instance of <a class="reference internal" href="#pyneric.rest_requests.RestResource.container_class" title="pyneric.rest_requests.RestResource.container_class"><code class="xref py py-attr docutils literal"><span class="pre">container_class</span></code></a> if that is not <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a>;
+otherwise, this is the URL under which this resource resides.</p>
 <p>Whether the container has a trailing slash determines whether the
 resource&#8217;s URL includes a trailing slash.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.url">
-<tt class="descname">url</tt><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestResource.url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestResource.url" title="Permalink to this definition">¶</a></dt>
+<code class="descname">url</code><a class="headerlink" href="#pyneric.rest_requests.RestResource.url" title="Permalink to this definition">¶</a></dt>
 <dd><p>The complete URL of the resource.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestResource.is_abstract">
-<tt class="descname">is_abstract</tt><em class="property"> = True</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.is_abstract" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_abstract</code><em class="property"> = True</em><a class="headerlink" href="#pyneric.rest_requests.RestResource.is_abstract" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="pyneric.rest_requests.RestCollection">
-<em class="property">class </em><tt class="descclassname">pyneric.rest_requests.</tt><tt class="descname">RestCollection</tt><big>(</big><em>container</em>, <em>id=None</em><big>)</big><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestCollection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><tt class="xref py py-class docutils literal"><span class="pre">pyneric.rest_requests.RestResource</span></tt></a></p>
+<em class="property">class </em><code class="descclassname">pyneric.rest_requests.</code><code class="descname">RestCollection</code><span class="sig-paren">(</span><em>container</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyneric.rest_requests.RestResource" title="pyneric.rest_requests.RestResource"><code class="xref py py-class docutils literal"><span class="pre">pyneric.rest_requests.RestResource</span></code></a></p>
 <p>A standard REST collection.</p>
 <p>This is a special type of resource in REST where a set of usually
 homogeneous, but at least related, resources are contained within a
-collection.  The collection is represented by the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.url_path" title="pyneric.rest_requests.RestCollection.url_path"><tt class="xref py py-obj docutils literal"><span class="pre">url_path</span></tt></a> (usually a
+collection.  The collection is represented by the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.url_path" title="pyneric.rest_requests.RestCollection.url_path"><code class="xref py py-obj docutils literal"><span class="pre">url_path</span></code></a> (usually a
 plural noun) and each member of the collection is represented by a unique
 identifier under the collection in the URL path.  For example, a collection
 called &#8220;resources&#8221; might have individual members of the collection
 represented by &#8220;resources/1&#8221; and &#8220;resources/2&#8221;.  In this case, &#8220;resources&#8221;
-would be the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.url_path" title="pyneric.rest_requests.RestCollection.url_path"><tt class="xref py py-attr docutils literal"><span class="pre">url_path</span></tt></a>, and &#8220;1&#8221; and &#8220;2&#8221; would be the values for
-<a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a>.</p>
+would be the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.url_path" title="pyneric.rest_requests.RestCollection.url_path"><code class="xref py py-attr docutils literal"><span class="pre">url_path</span></code></a>, and &#8220;1&#8221; and &#8220;2&#8221; would be the values for
+<a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><code class="xref py py-attr docutils literal"><span class="pre">id</span></code></a>.</p>
 <p>An instance will represent either the collection or a member of the
-collection, depending on the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><tt class="xref py py-obj docutils literal"><span class="pre">id</span></tt></a> argument passed to the constructor.</p>
+collection, depending on the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><code class="xref py py-obj docutils literal"><span class="pre">id</span></code></a> argument passed to the constructor.</p>
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestCollection.container_class">
-<tt class="descname">container_class</tt><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.container_class" title="Permalink to this definition">¶</a></dt>
+<code class="descname">container_class</code><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.container_class" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestCollection.container_is_collection">
-<tt class="descname">container_is_collection</tt><em class="property"> = False</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.container_is_collection" title="Permalink to this definition">¶</a></dt>
+<code class="descname">container_is_collection</code><em class="property"> = False</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.container_is_collection" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="pyneric.rest_requests.RestCollection.id_type">
-<tt class="descname">id_type</tt><a class="headerlink" href="#pyneric.rest_requests.RestCollection.id_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>The type of the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a> attribute.</p>
-<p>The <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id_type" title="pyneric.rest_requests.RestCollection.id_type"><tt class="xref py py-attr docutils literal"><span class="pre">id_type</span></tt></a> is <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> by default, since that is how it is
-represented in the resource URL, but it can be set to another type if the
-<a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a> attribute should be accepted and presented differently from its
-string representation.</p>
-<p>alias of <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a></p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="pyneric.rest_requests.RestCollection.is_abstract">
-<tt class="descname">is_abstract</tt><em class="property"> = True</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.is_abstract" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_abstract</code><em class="property"> = True</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.is_abstract" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestCollection.reference_attribute">
-<tt class="descname">reference_attribute</tt><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.reference_attribute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reference_attribute</code><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.reference_attribute" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestCollection.url_path">
-<tt class="descname">url_path</tt><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.url_path" title="Permalink to this definition">¶</a></dt>
+<code class="descname">url_path</code><em class="property"> = None</em><a class="headerlink" href="#pyneric.rest_requests.RestCollection.url_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyneric.rest_requests.RestCollection.id_type">
+<code class="descname">id_type</code><a class="headerlink" href="#pyneric.rest_requests.RestCollection.id_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><code class="xref py py-attr docutils literal"><span class="pre">id</span></code></a> attribute.</p>
+<p>The <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id_type" title="pyneric.rest_requests.RestCollection.id_type"><code class="xref py py-attr docutils literal"><span class="pre">id_type</span></code></a> is <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> by default, since that is how it is
+represented in the resource URL, but it can be set to another type if the
+<a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><code class="xref py py-attr docutils literal"><span class="pre">id</span></code></a> attribute should be accepted and presented differently from its
+string representation.</p>
+<p>alias of <a class="reference external" href="http://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.4)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></p>
+</dd></dl>
 
 <dl class="classmethod">
 <dt id="pyneric.rest_requests.RestCollection.validate_id">
-<em class="property">classmethod </em><tt class="descname">validate_id</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestCollection.validate_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestCollection.validate_id" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">validate_id</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestCollection.validate_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestCollection.validate_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate the given value as a valid identifier for this resource.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyneric.rest_requests.RestCollection.id">
-<tt class="descname">id</tt><a class="reference internal" href="../_modules/pyneric/rest_requests.html#RestCollection.id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyneric.rest_requests.RestCollection.id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">id</code><a class="headerlink" href="#pyneric.rest_requests.RestCollection.id" title="Permalink to this definition">¶</a></dt>
 <dd><p>The identifier of the member within the REST collection.</p>
-<p>This is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a> if this instance represents the entire collection.</p>
+<p>This is <a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> if this instance represents the entire collection.</p>
+<p>The value provided to the constructor must be one of:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.python.org/3/library/constants.html#None" title="(in Python v3.4)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></li>
+<li>an instance of <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id_type" title="pyneric.rest_requests.RestCollection.id_type"><code class="xref py py-attr docutils literal"><span class="pre">id_type</span></code></a></li>
+<li>a value that can be passed alone to <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id_type" title="pyneric.rest_requests.RestCollection.id_type"><code class="xref py py-attr docutils literal"><span class="pre">id_type</span></code></a></li>
+</ul>
+<p>In the last case, the object that results from the instantiation
+becomes the value of this property.</p>
+<p>Like <a class="reference internal" href="#pyneric.rest_requests.RestCollection.url_path" title="pyneric.rest_requests.RestCollection.url_path"><code class="xref py py-attr docutils literal"><span class="pre">url_path</span></code></a>, when this value is included in a URL produced
+by the library, it is automatically cast to a string and URL-quoted,
+except that path separators (slashes) in <a class="reference internal" href="#pyneric.rest_requests.RestCollection.id" title="pyneric.rest_requests.RestCollection.id"><code class="xref py py-attr docutils literal"><span class="pre">id</span></code></a> are also quoted.</p>
 </dd></dl>
 
 </dd></dl>
@@ -217,20 +233,22 @@ string representation.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="meta.html"
-                        title="previous chapter">pyneric.meta</a></p>
+  <p class="topless"><a href="requests.html"
+                        title="previous chapter">pyneric.requests</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="django.html"
                         title="next chapter">pyneric.django</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/api/rest_requests.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/rest_requests.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -247,7 +265,7 @@ string representation.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -260,15 +278,15 @@ string representation.</p>
           <a href="django.html" title="pyneric.django"
              >next</a> |</li>
         <li class="right" >
-          <a href="meta.html" title="pyneric.meta"
+          <a href="requests.html" title="pyneric.requests"
              >previous</a> |</li>
-        <li><a href="../index.html">pyneric 1.2.1 documentation</a> &raquo;</li>
-          <li><a href="../api.html" >API</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014-2015, Craig Hurd-Rindy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

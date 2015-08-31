@@ -1,6 +1,30 @@
 Release Notes
 =============
 
+Version 1.3.0
+-------------
+
+Fix URL-quoting in `pyneric.rest_requests` (issue #7), which might cause errors
+with callers who were working around the bug by providing URL-quoted values
+where that should not have been necessary.  Remove the URL-quoting of values
+provided to these classes that are used as segments of URLs prior to upgrading.
+Actual URLs (such as the `container` argument passed to the
+:class:`~pyneric.rest_requests.RestResource` constructor) should remain
+URL-quoted.
+
+Add the `pyneric.requests` module, which includes the new
+`~pyneric.requests.RequestHandler` class.
+
+Fix a Python 2.6 incompatibility in `pyneric.future`.  Note that Python 2.6 is
+still not officially supported.
+
+Deprecate :func:`pyneric.future.python_2_unicode_compatible`, since it is now
+the same implementation as the one in `future.utils`.
+
+Fix a bug in :meth:`pyneric.rest_requests.RestResource.from_url` that made it
+fail to work correctly with resources that have a trailing slash in
+:attr:`~pyneric.rest_requests.RestResource.url_path`.
+
 Version 1.2.1
 -------------
 

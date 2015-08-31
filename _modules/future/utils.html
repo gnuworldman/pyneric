@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>future.utils &mdash; pyneric 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyneric 1.3.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for future.utils</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A selection of cross-compatible functions for Python 2 and 3.</span>
+
+<span class="sd">This module exports useful functions for 2/3 compatible code:</span>
+
+<span class="sd">    * bind_method: binds functions to classes</span>
+<span class="sd">    * ``native_str_to_bytes`` and ``bytes_to_native_str``</span>
+<span class="sd">    * ``native_str``: always equal to the native platform string object (because</span>
+<span class="sd">      this may be shadowed by imports from future.builtins)</span>
+<span class="sd">    * lists: lrange(), lmap(), lzip(), lfilter()</span>
+<span class="sd">    * iterable method compatibility:</span>
+<span class="sd">        - iteritems, iterkeys, itervalues</span>
+<span class="sd">        - viewitems, viewkeys, viewvalues</span>
+
+<span class="sd">        These use the original method if available, otherwise they use items,</span>
+<span class="sd">        keys, values.</span>
+
+<span class="sd">    * types:</span>
+
+<span class="sd">        * text_type: unicode in Python 2, str in Python 3</span>
+<span class="sd">        * binary_type: str in Python 2, bythes in Python 3</span>
+<span class="sd">        * string_types: basestring in Python 2, str in Python 3</span>
+
+<span class="sd">    * bchr(c):</span>
+<span class="sd">        Take an integer and make a 1-character byte string</span>
+<span class="sd">    * bord(c)</span>
+<span class="sd">        Take the result of indexing on a byte string and make an integer</span>
+<span class="sd">    * tobytes(s)</span>
+<span class="sd">        Take a text string, a byte string, or a sequence of characters taken</span>
+<span class="sd">        from a byte string, and make a byte string.</span>
+<span class="sd">    </span>
+<span class="sd">    * raise_from()</span>
+<span class="sd">    * raise_with_traceback()</span>
+
+<span class="sd">This module also defines these decorators:</span>
+
+<span class="sd">    * ``python_2_unicode_compatible``</span>
+<span class="sd">    * ``with_metaclass``</span>
+<span class="sd">    * ``implements_iterator``</span>
+
+<span class="sd">Some of the functions in this module come from the following sources:</span>
+
+<span class="sd">    * Jinja2 (BSD licensed: see</span>
+<span class="sd">      https://github.com/mitsuhiko/jinja2/blob/master/LICENSE)</span>
+<span class="sd">    * Pandas compatibility module pandas.compat</span>
+<span class="sd">    * six.py by Benjamin Peterson</span>
+<span class="sd">    * Django</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">types</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+
+<span class="n">PY3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+<span class="n">PY2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="n">PY26</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">PY27</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="n">PYPY</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s">&#39;pypy_translation_info&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="python_2_unicode_compatible"><a class="viewcode-back" href="../../api/future.html#pyneric.future.python_2_unicode_compatible">[docs]</a><span class="k">def</span> <span class="nf">python_2_unicode_compatible</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A decorator that defines __unicode__ and __str__ methods under Python</span>
+<span class="sd">    2. Under Python 3, this decorator is a no-op.</span>
+<span class="sd">    </span>
+<span class="sd">    To support Python 2 and 3 with a single code base, define a __str__</span>
+<span class="sd">    method returning unicode text and apply this decorator to the class, like</span>
+<span class="sd">    this::</span>
+
+<span class="sd">    &gt;&gt;&gt; from future.utils import python_2_unicode_compatible</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; @python_2_unicode_compatible</span>
+<span class="sd">    ... class MyClass(object):</span>
+<span class="sd">    ...     def __str__(self):</span>
+<span class="sd">    ...         return u&#39;Unicode string: \u5b54\u5b50&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; a = MyClass()</span>
+
+<span class="sd">    Then, after this import:</span>
+
+<span class="sd">    &gt;&gt;&gt; from future.builtins import str</span>
+<span class="sd">    </span>
+<span class="sd">    the following is ``True`` on both Python 3 and 2::</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; str(a) == a.encode(&#39;utf-8&#39;).decode(&#39;utf-8&#39;)</span>
+<span class="sd">    True</span>
+
+<span class="sd">    and, on a Unicode-enabled terminal with the right fonts, these both print the</span>
+<span class="sd">    Chinese characters for Confucius::</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; print(a)</span>
+<span class="sd">    &gt;&gt;&gt; print(str(a))</span>
+
+<span class="sd">    The implementation comes from django.utils.encoding.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">PY3</span><span class="p">:</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">__unicode__</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">__str__</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">__str__</span> <span class="o">=</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cls</span>
+
+</div>
+<span class="k">def</span> <span class="nf">with_metaclass</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="o">*</span><span class="n">bases</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function from jinja2/_compat.py. License: BSD.</span>
+
+<span class="sd">    Use it like this::</span>
+<span class="sd">        </span>
+<span class="sd">        class BaseForm(object):</span>
+<span class="sd">            pass</span>
+<span class="sd">        </span>
+<span class="sd">        class FormType(type):</span>
+<span class="sd">            pass</span>
+<span class="sd">        </span>
+<span class="sd">        class Form(with_metaclass(FormType, BaseForm)):</span>
+<span class="sd">            pass</span>
+
+<span class="sd">    This requires a bit of explanation: the basic idea is to make a</span>
+<span class="sd">    dummy metaclass for one level of class instantiation that replaces</span>
+<span class="sd">    itself with the actual metaclass.  Because of internal type checks</span>
+<span class="sd">    we also need to make sure that we downgrade the custom metaclass</span>
+<span class="sd">    for one level to something closer to type (that&#39;s why __call__ and</span>
+<span class="sd">    __init__ comes back from type etc.).</span>
+<span class="sd">    </span>
+<span class="sd">    This has the advantage over six.with_metaclass of not introducing</span>
+<span class="sd">    dummy classes into the final MRO.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">class</span> <span class="nc">metaclass</span><span class="p">(</span><span class="n">meta</span><span class="p">):</span>
+        <span class="n">__call__</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">__call__</span>
+        <span class="n">__init__</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">__init__</span>
+        <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">this_bases</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">this_bases</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">d</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">meta</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">metaclass</span><span class="p">(</span><span class="s">&#39;temporary_class&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">{})</span>
+
+
+<span class="c"># Definitions from pandas.compat and six.py follow:</span>
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">bchr</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">s</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">bstr</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&#39;latin-1&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bord</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="n">string_types</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">integer_types</span> <span class="o">=</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">class_types</span> <span class="o">=</span> <span class="nb">type</span><span class="p">,</span>
+    <span class="n">text_type</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">binary_type</span> <span class="o">=</span> <span class="nb">bytes</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># Python 2</span>
+    <span class="k">def</span> <span class="nf">bchr</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bstr</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bord</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="n">string_types</span> <span class="o">=</span> <span class="nb">basestring</span><span class="p">,</span>
+    <span class="n">integer_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">long</span><span class="p">)</span>
+    <span class="n">class_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ClassType</span><span class="p">)</span>
+    <span class="n">text_type</span> <span class="o">=</span> <span class="nb">unicode</span>
+    <span class="n">binary_type</span> <span class="o">=</span> <span class="nb">str</span>
+
+<span class="c">###</span>
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">tobytes</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;latin-1&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># Python 2</span>
+    <span class="k">def</span> <span class="nf">tobytes</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;latin-1&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">tobytes</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    Encodes to latin-1 (where the first 256 chars are the same as</span>
+<span class="s">    ASCII.)</span>
+<span class="s">    &quot;&quot;&quot;</span>
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">native_str_to_bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">bytes_to_native_str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">b</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">text_to_native_str</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># Python 2</span>
+    <span class="k">def</span> <span class="nf">native_str_to_bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">future.types</span> <span class="kn">import</span> <span class="n">newbytes</span>    <span class="c"># to avoid a circular import</span>
+        <span class="k">return</span> <span class="n">newbytes</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">bytes_to_native_str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">native</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">text_to_native_str</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;ascii&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use this to create a Py2 native string when &quot;from __future__ import</span>
+<span class="sd">        unicode_literals&quot; is in effect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+
+<span class="n">native_str_to_bytes</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    On Py3, returns an encoded string.</span>
+<span class="s">    On Py2, returns a newbytes type, ignoring the ``encoding`` argument.</span>
+<span class="s">    &quot;&quot;&quot;</span>
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="c"># list-producing versions of the major Python iterating functions</span>
+    <span class="k">def</span> <span class="nf">lrange</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">lzip</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">lmap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">lfilter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">__builtin__</span>
+    <span class="c"># Python 2-builtin ranges produce lists</span>
+    <span class="n">lrange</span> <span class="o">=</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">range</span>
+    <span class="n">lzip</span> <span class="o">=</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">zip</span>
+    <span class="n">lmap</span> <span class="o">=</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">map</span>
+    <span class="n">lfilter</span> <span class="o">=</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">filter</span>
+
+
+<span class="k">def</span> <span class="nf">isidentifier</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dotted</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A function equivalent to the str.isidentifier method on Py3</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">dotted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">isidentifier</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">re</span>
+        <span class="n">_name_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;[a-zA-Z_][a-zA-Z0-9_]*$&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_name_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">viewitems</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for iterating over dictionary items with the same set-like</span>
+<span class="sd">    behaviour on Py2.7 as on Py3.</span>
+
+<span class="sd">    Passes kwargs to method.&quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;viewitems&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">viewkeys</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for iterating over dictionary keys with the same set-like</span>
+<span class="sd">    behaviour on Py2.7 as on Py3.</span>
+
+<span class="sd">    Passes kwargs to method.&quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;viewkeys&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">viewvalues</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for iterating over dictionary values with the same set-like</span>
+<span class="sd">    behaviour on Py2.7 as on Py3.</span>
+
+<span class="sd">    Passes kwargs to method.&quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;viewvalues&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use this only if compatibility with Python versions before 2.7 is</span>
+<span class="sd">    required. Otherwise, prefer viewitems().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;iteritems&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">iterkeys</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use this only if compatibility with Python versions before 2.7 is</span>
+<span class="sd">    required. Otherwise, prefer viewkeys().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;iterkeys&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">itervalues</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use this only if compatibility with Python versions before 2.7 is</span>
+<span class="sd">    required. Otherwise, prefer viewvalues().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&quot;itervalues&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">bind_method</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Bind a method to class, python 2 and python 3 compatible.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    cls : type</span>
+<span class="sd">        class to receive bound method</span>
+<span class="sd">    name : basestring</span>
+<span class="sd">        name of method on class instance</span>
+<span class="sd">    func : function</span>
+<span class="sd">        function to be bound as method</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># only python 2 has an issue with bound/unbound methods</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">PY3</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cls</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">getexception</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_caller_globals_and_locals</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the globals and locals of the calling frame.</span>
+
+<span class="sd">    Is there an alternative to frame hacking here?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">caller_frame</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">myglobals</span> <span class="o">=</span> <span class="n">caller_frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">f_globals</span>
+    <span class="n">mylocals</span> <span class="o">=</span> <span class="n">caller_frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">f_locals</span>
+    <span class="k">return</span> <span class="n">myglobals</span><span class="p">,</span> <span class="n">mylocals</span>
+
+
+<span class="k">def</span> <span class="nf">_repr_strip</span><span class="p">(</span><span class="n">mystring</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the string without any initial or final quotes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">mystring</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">raise_from</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">cause</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Equivalent to:</span>
+
+<span class="sd">            raise EXCEPTION from CAUSE</span>
+
+<span class="sd">        on Python 3. (See PEP 3134).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Is either arg an exception class (e.g. IndexError) rather than</span>
+        <span class="c"># instance (e.g. IndexError(&#39;my message here&#39;)? If so, pass the</span>
+        <span class="c"># name of the class undisturbed through to &quot;raise ... from ...&quot;.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+            <span class="n">exc</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cause</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">cause</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+            <span class="n">cause</span> <span class="o">=</span> <span class="n">cause</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="n">execstr</span> <span class="o">=</span> <span class="s">&quot;raise &quot;</span> <span class="o">+</span> <span class="n">_repr_strip</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; from &quot;</span> <span class="o">+</span> <span class="n">_repr_strip</span><span class="p">(</span><span class="n">cause</span><span class="p">)</span>
+        <span class="n">myglobals</span><span class="p">,</span> <span class="n">mylocals</span> <span class="o">=</span> <span class="n">_get_caller_globals_and_locals</span><span class="p">()</span>
+        <span class="k">exec</span><span class="p">(</span><span class="n">execstr</span><span class="p">,</span> <span class="n">myglobals</span><span class="p">,</span> <span class="n">mylocals</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">raise_</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tb</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A function that matches the Python 2.x ``raise`` statement. This</span>
+<span class="sd">        allows re-raising exceptions with the cls value and traceback on</span>
+<span class="sd">        Python 2 and 3.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;instance exception may not have a separate value&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">exc</span> <span class="o">=</span> <span class="n">tp</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exc</span> <span class="o">=</span> <span class="n">tp</span>
+        <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">__traceback__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">tb</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">exc</span>
+
+    <span class="k">def</span> <span class="nf">raise_with_traceback</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">traceback</span><span class="o">=</span><span class="bp">Ellipsis</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">traceback</span> <span class="o">==</span> <span class="bp">Ellipsis</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">traceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="n">exc</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">traceback</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">raise_from</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">cause</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Equivalent to:</span>
+
+<span class="sd">            raise EXCEPTION from CAUSE</span>
+
+<span class="sd">        on Python 3. (See PEP 3134).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Is either arg an exception class (e.g. IndexError) rather than</span>
+        <span class="c"># instance (e.g. IndexError(&#39;my message here&#39;)? If so, pass the</span>
+        <span class="c"># name of the class undisturbed through to &quot;raise ... from ...&quot;.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">exc</span><span class="p">()</span>
+            <span class="c"># exc = exc.__name__</span>
+            <span class="c"># execstr = &quot;e = &quot; + _repr_strip(exc) + &quot;()&quot;</span>
+            <span class="c"># myglobals, mylocals = _get_caller_globals_and_locals()</span>
+            <span class="c"># exec(execstr, myglobals, mylocals)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">exc</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">__suppress_context__</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cause</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">cause</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">__cause__</span> <span class="o">=</span> <span class="n">cause</span><span class="p">()</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">__suppress_context__</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">elif</span> <span class="n">cause</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">__cause__</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">__suppress_context__</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cause</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">):</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">__cause__</span> <span class="o">=</span> <span class="n">cause</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">__suppress_context__</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;exception causes must derive from BaseException&quot;</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">__context__</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="k">exec</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">def raise_(tp, value=None, tb=None):</span>
+<span class="s">    raise tp, value, tb</span>
+
+<span class="s">def raise_with_traceback(exc, traceback=Ellipsis):</span>
+<span class="s">    if traceback == Ellipsis:</span>
+<span class="s">        _, _, traceback = sys.exc_info()</span>
+<span class="s">    raise exc, None, traceback</span>
+<span class="s">&#39;&#39;&#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+
+<span class="n">raise_with_traceback</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="p">(</span>
+<span class="sd">&quot;&quot;&quot;Raise exception with existing traceback.</span>
+<span class="sd">If traceback is not passed, uses sys.exc_info() to get traceback.&quot;&quot;&quot;</span>
+<span class="p">)</span>
+
+
+<span class="c"># Deprecated alias for backward compatibility with ``future`` versions &lt; 0.11:</span>
+<span class="n">reraise</span> <span class="o">=</span> <span class="n">raise_</span>
+
+
+<span class="k">def</span> <span class="nf">implements_iterator</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    From jinja2/_compat.py. License: BSD.</span>
+
+<span class="sd">    Use as a decorator like this::</span>
+<span class="sd">        </span>
+<span class="sd">        @implements_iterator</span>
+<span class="sd">        class UppercasingIterator(object):</span>
+<span class="sd">            def __init__(self, iterable):</span>
+<span class="sd">                self._iter = iter(iterable)</span>
+<span class="sd">            def __iter__(self):</span>
+<span class="sd">                return self</span>
+<span class="sd">            def __next__(self):</span>
+<span class="sd">                return next(self._iter).upper()</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cls</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">__next__</span>
+        <span class="k">del</span> <span class="n">cls</span><span class="o">.</span><span class="n">__next__</span>
+        <span class="k">return</span> <span class="n">cls</span>
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="n">get_next</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">next</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">get_next</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">__next__</span>
+
+
+<span class="k">def</span> <span class="nf">encode_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">filename</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">filename</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filename</span>
+
+
+<span class="k">def</span> <span class="nf">is_new_style</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Python 2.7 has both new-style and old-style classes. Old-style classes can</span>
+<span class="sd">    be pesky in some circumstances, such as when using inheritance.  Use this</span>
+<span class="sd">    function to test for whether a class is new-style. (Python 3 only has</span>
+<span class="sd">    new-style classes.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="s">&#39;__class__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s">&#39;__dict__&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span> 
+                                          <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="s">&#39;__slots__&#39;</span><span class="p">))</span>
+
+<span class="c"># The native platform string and bytes types. Useful because ``str`` and</span>
+<span class="c"># ``bytes`` are redefined on Py2 by ``from future.builtins import *``.</span>
+<span class="n">native_str</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">native_bytes</span> <span class="o">=</span> <span class="nb">bytes</span>
+
+
+<span class="k">def</span> <span class="nf">istext</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deprecated. Use::</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(obj, str)</span>
+<span class="sd">    after this import:</span>
+<span class="sd">        &gt;&gt;&gt; from future.builtins import str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="s">u&#39;&#39;</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">isbytes</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deprecated. Use::</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(obj, bytes)</span>
+<span class="sd">    after this import:</span>
+<span class="sd">        &gt;&gt;&gt; from future.builtins import bytes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;&#39;</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">isnewbytes</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Equivalent to the result of ``isinstance(obj, newbytes)`` were</span>
+<span class="sd">    ``__instancecheck__`` not overridden on the newbytes subclass. In</span>
+<span class="sd">    other words, it is REALLY a newbytes instance, not a Py2 native str</span>
+<span class="sd">    object?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># TODO: generalize this so that it works with subclasses of newbytes</span>
+    <span class="c"># Import is here to avoid circular imports:</span>
+    <span class="kn">from</span> <span class="nn">future.types.newbytes</span> <span class="kn">import</span> <span class="n">newbytes</span>
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="n">newbytes</span>
+
+
+<span class="k">def</span> <span class="nf">isint</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deprecated. Tests whether an object is a Py3 ``int`` or either a Py2 ``int`` or</span>
+<span class="sd">    ``long``.</span>
+
+<span class="sd">    Instead of using this function, you can use:</span>
+
+<span class="sd">        &gt;&gt;&gt; from future.builtins import int</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(obj, int)</span>
+
+<span class="sd">    The following idiom is equivalent:</span>
+
+<span class="sd">        &gt;&gt;&gt; from numbers import Integral</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(obj, Integral)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">native</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    On Py3, this is a no-op: native(obj) -&gt; obj</span>
+
+<span class="sd">    On Py2, returns the corresponding native Py2 types that are</span>
+<span class="sd">    superclasses for backported objects from Py3:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from builtins import str, bytes, int</span>
+
+<span class="sd">    &gt;&gt;&gt; native(str(u&#39;ABC&#39;))</span>
+<span class="sd">    u&#39;ABC&#39;</span>
+<span class="sd">    &gt;&gt;&gt; type(native(str(u&#39;ABC&#39;)))</span>
+<span class="sd">    unicode</span>
+
+<span class="sd">    &gt;&gt;&gt; native(bytes(b&#39;ABC&#39;))</span>
+<span class="sd">    b&#39;ABC&#39;</span>
+<span class="sd">    &gt;&gt;&gt; type(native(bytes(b&#39;ABC&#39;)))</span>
+<span class="sd">    bytes</span>
+
+<span class="sd">    &gt;&gt;&gt; native(int(10**20))</span>
+<span class="sd">    100000000000000000000L</span>
+<span class="sd">    &gt;&gt;&gt; type(native(int(10**20)))</span>
+<span class="sd">    long</span>
+
+<span class="sd">    Existing native types on Py2 will be returned unchanged:</span>
+
+<span class="sd">    &gt;&gt;&gt; type(native(u&#39;ABC&#39;))</span>
+<span class="sd">    unicode</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;__native__&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">__native__</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="c"># Implementation of exec_ is from ``six``:</span>
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">builtins</span>
+    <span class="n">exec_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="s">&quot;exec&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exec_</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">globs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">locs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Execute code in a namespace.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">globs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">globs</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span>
+            <span class="k">if</span> <span class="n">locs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">locs</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span>
+            <span class="k">del</span> <span class="n">frame</span>
+        <span class="k">elif</span> <span class="n">locs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">locs</span> <span class="o">=</span> <span class="n">globs</span>
+        <span class="k">exec</span><span class="p">(</span><span class="s">&quot;&quot;&quot;exec code in globs, locs&quot;&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="c"># Defined here for backward compatibility:</span>
+<span class="k">def</span> <span class="nf">old_div</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DEPRECATED: import ``old_div`` from ``past.utils`` instead.</span>
+
+<span class="sd">    Equivalent to ``a / b`` on Python 2 without ``from __future__ import</span>
+<span class="sd">    division``.</span>
+
+<span class="sd">    TODO: generalize this to other objects (like arrays etc.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">//</span> <span class="n">b</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+
+
+<span class="k">def</span> <span class="nf">as_native_str</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A decorator to turn a function or method call that returns text, i.e.</span>
+<span class="sd">    unicode, into one that returns a native platform str.</span>
+
+<span class="sd">    Use it as a decorator like this::</span>
+<span class="sd">        </span>
+<span class="sd">        from __future__ import unicode_literals</span>
+
+<span class="sd">        class MyClass(object):</span>
+<span class="sd">            @as_native_str(encoding=&#39;ascii&#39;)</span>
+<span class="sd">            def __repr__(self):</span>
+<span class="sd">                return next(self._iter).upper()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">wrapper</span>
+        <span class="k">return</span> <span class="n">encoder</span>
+
+<span class="c"># listvalues and listitems definitions from Nick Coghlan&#39;s (withdrawn)</span>
+<span class="c"># PEP 496:</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">dict</span><span class="o">.</span><span class="n">iteritems</span>
+<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="c"># Python 3</span>
+    <span class="k">def</span> <span class="nf">listvalues</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">listitems</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># Python 2</span>
+    <span class="k">def</span> <span class="nf">listvalues</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">listitems</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">ensure_new_type</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">ensure_new_type</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">future.types.newbytes</span> <span class="kn">import</span> <span class="n">newbytes</span>
+        <span class="kn">from</span> <span class="nn">future.types.newstr</span> <span class="kn">import</span> <span class="n">newstr</span>
+        <span class="kn">from</span> <span class="nn">future.types.newint</span> <span class="kn">import</span> <span class="n">newint</span>
+        <span class="kn">from</span> <span class="nn">future.types.newdict</span> <span class="kn">import</span> <span class="n">newdict</span>
+
+        <span class="n">native_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">native</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+
+        <span class="c"># Upcast only if the type is already a native (non-future) type</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">native_type</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)):</span>
+            <span class="c"># Upcast</span>
+            <span class="k">if</span> <span class="n">native_type</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>  <span class="c"># i.e. Py2 8-bit str</span>
+                <span class="k">return</span> <span class="n">newbytes</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">native_type</span> <span class="o">==</span> <span class="nb">unicode</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">newstr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">native_type</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">newint</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">native_type</span> <span class="o">==</span> <span class="nb">long</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">newint</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">native_type</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">newdict</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;type </span><span class="si">%s</span><span class="s"> not supported&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Already a new type</span>
+            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">newbytes</span><span class="p">,</span> <span class="n">newstr</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PY2&#39;</span><span class="p">,</span> <span class="s">&#39;PY26&#39;</span><span class="p">,</span> <span class="s">&#39;PY3&#39;</span><span class="p">,</span> <span class="s">&#39;PYPY&#39;</span><span class="p">,</span>
+           <span class="s">&#39;as_native_str&#39;</span><span class="p">,</span> <span class="s">&#39;bind_method&#39;</span><span class="p">,</span> <span class="s">&#39;bord&#39;</span><span class="p">,</span> <span class="s">&#39;bstr&#39;</span><span class="p">,</span>
+           <span class="s">&#39;bytes_to_native_str&#39;</span><span class="p">,</span> <span class="s">&#39;encode_filename&#39;</span><span class="p">,</span> <span class="s">&#39;ensure_new_type&#39;</span><span class="p">,</span>
+           <span class="s">&#39;exec_&#39;</span><span class="p">,</span> <span class="s">&#39;get_next&#39;</span><span class="p">,</span> <span class="s">&#39;getexception&#39;</span><span class="p">,</span> <span class="s">&#39;implements_iterator&#39;</span><span class="p">,</span>
+           <span class="s">&#39;is_new_style&#39;</span><span class="p">,</span> <span class="s">&#39;isbytes&#39;</span><span class="p">,</span> <span class="s">&#39;isidentifier&#39;</span><span class="p">,</span> <span class="s">&#39;isint&#39;</span><span class="p">,</span>
+           <span class="s">&#39;isnewbytes&#39;</span><span class="p">,</span> <span class="s">&#39;istext&#39;</span><span class="p">,</span> <span class="s">&#39;iteritems&#39;</span><span class="p">,</span> <span class="s">&#39;iterkeys&#39;</span><span class="p">,</span> <span class="s">&#39;itervalues&#39;</span><span class="p">,</span>
+           <span class="s">&#39;lfilter&#39;</span><span class="p">,</span> <span class="s">&#39;listitems&#39;</span><span class="p">,</span> <span class="s">&#39;listvalues&#39;</span><span class="p">,</span> <span class="s">&#39;lmap&#39;</span><span class="p">,</span> <span class="s">&#39;lrange&#39;</span><span class="p">,</span>
+           <span class="s">&#39;lzip&#39;</span><span class="p">,</span> <span class="s">&#39;native&#39;</span><span class="p">,</span> <span class="s">&#39;native_bytes&#39;</span><span class="p">,</span> <span class="s">&#39;native_str&#39;</span><span class="p">,</span>
+           <span class="s">&#39;native_str_to_bytes&#39;</span><span class="p">,</span> <span class="s">&#39;old_div&#39;</span><span class="p">,</span>
+           <span class="s">&#39;python_2_unicode_compatible&#39;</span><span class="p">,</span> <span class="s">&#39;raise_&#39;</span><span class="p">,</span>
+           <span class="s">&#39;raise_with_traceback&#39;</span><span class="p">,</span> <span class="s">&#39;reraise&#39;</span><span class="p">,</span> <span class="s">&#39;text_to_native_str&#39;</span><span class="p">,</span>
+           <span class="s">&#39;tobytes&#39;</span><span class="p">,</span> <span class="s">&#39;viewitems&#39;</span><span class="p">,</span> <span class="s">&#39;viewkeys&#39;</span><span class="p">,</span> <span class="s">&#39;viewvalues&#39;</span><span class="p">,</span>
+           <span class="s">&#39;with_metaclass&#39;</span>
+          <span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyneric 1.3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2015, Craig Hurd-Rindy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
