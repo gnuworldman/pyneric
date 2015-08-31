@@ -8,7 +8,7 @@ from pyneric.django.db.models.fields import pguuid
 
 class AutoPgUuidTest(models.Model):
 
-    uuid_field = pguuid.AutoPgUuidField(primary_key=True)
+    uuid_field = pguuid.AutoPgUuidField(primary_key=True, editable=False)
 
     class Meta:
 

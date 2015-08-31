@@ -10,28 +10,44 @@ install_aliases()
 
 import inspect
 import functools
-from urllib.parse import urljoin, urlsplit, urlunsplit
+from urllib.parse import quote, unquote, urljoin, urlsplit, urlunsplit
 
 from pyneric.meta import Metaclass
-from pyneric.util import tryf
 from pyneric import util
+from pyneric.util import tryf
 
 
 __all__ = []
 
+_ENCODING = 'UTF-8'
+"""Assumed string encoding (matches quote/unquote default)"""
 
-def _url_join(base, url):
-    if base.endswith('/'):
-        if not url.endswith('/'):
-            url += '/'
+SEPARATOR = '/'
+"""URL path separator"""
+
+
+def _ensure_text(value, coerce=True):
+    return ensure_text(value, _ENCODING, coerce=coerce)
+
+
+def _unquote(string):
+    return unquote(string, errors='strict')
+
+
+def _url_join(base, path, safe=''):
+    base = _ensure_text(base)
+    path = quote(_ensure_text(path), safe=safe)
+    if base.endswith(SEPARATOR):
+        if not path.endswith(SEPARATOR):
+            path += SEPARATOR
     else:
-        base += '/'
-    return urljoin(base, url)
+        base += SEPARATOR
+    return urljoin(base, path)
 
 
 def _url_split(url):
     result = list(urlsplit(url))
-    result[2] = result[2].rstrip('/')
+    result[2] = result[2].rstrip(SEPARATOR)
     result[3:] = '', ''
     return result
 
@@ -47,15 +63,21 @@ class _RestMetaclass(Metaclass):
     def validate_url_path(value):
         if value is None:
             return  # Resource is abstract; no further validation is necessary.
-        if not isinstance(value, basestring):
+        try:
+            _ensure_text(value, coerce=False)
+        except TypeError:
             raise TypeError(
-                "invalid url_path attribute: {!r}"
+                "invalid url_path attribute (not string): {!r}"
                 .format(value))
-        elif not value:
+        except UnicodeDecodeError:
+            raise ValueError(
+                "invalid url_path attribute (not valid {}): {!r}"
+                .format(_ENCODING, value))
+        if not value:
             raise ValueError(
                 "invalid url_path attribute (empty): {!r}"
                 .format(value))
-        elif value.startswith('/'):
+        elif value.startswith(SEPARATOR):
             raise ValueError(
                 "invalid url_path attribute (leading slash): {!r}"
                 .format(value))
@@ -71,17 +93,14 @@ class _RestMetaclass(Metaclass):
 
     @staticmethod
     def validate_reference_attribute(value):
-        if value is not None:
-            if not isinstance(value, basestring):
-                raise TypeError(
-                    "invalid reference_attribute attribute: {!r}"
-                    .format(value))
-            try:
-                util.valid_python_identifier(value, exception=ValueError)
-            except ValueError as exc:
-                raise ValueError(
-                    "invalid reference_attribute attribute: {}"
-                    .format(exc))
+        if value is None:
+            return
+        try:
+            util.valid_python_identifier(value, exception=True)
+        except (TypeError, UnicodeDecodeError, ValueError) as exc:
+            raise type(exc)(
+                "invalid reference_attribute attribute: {!r} ({})"
+                .format(value, exc))
 
     @property
     def is_abstract(cls):
@@ -106,15 +125,20 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
 
     This may be `None` to signify that this is an abstract resource; otherwise,
     it is the path under the base (API root or containing resource) identifying
-    this resource.
+    this resource, which will be automatically URL-quoted (except for path
+    separators) when it is included in a URL produced by the library.
 
     This may contain path separator(s) ("/") if there is no need to access the
     path segments as distinct REST resources.
 
     This cannot start with a path separator, but it may end with one if this
     and resources under this one (i.e., those that use this one as container)
-    shall have trailing slashes.  This has no effect if the `container` has a
-    trailing slash.
+    shall each have a trailing path separator.  If the `container` passed to
+    the constructor is a URL string with a trailing slash or a
+    :class:`RestResource` with a `url_path` ending with a path separator, then
+    it is not significant whether this value has a trailing path separator,
+    since all resources under that container are represented with a trailing
+    path separator.
 
     """
 
@@ -156,12 +180,16 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
     """
 
     def __init__(self, container):
-        def invalid_for_type():
-            raise ValueError(
-                "Container {!r} is invalid for resource type {!r}."
-                .format(container, type(self)))
+        def invalid_for_type(reason=None):
+            message = ("Container {!r} is invalid for resource type {!r}."
+                       .format(container, type(self)))
+            if reason:
+                message += "  " + reason
+            raise ValueError(message)
         if self.is_abstract:
-            raise TypeError("abstract RestResource is uninstantiable")
+            raise TypeError(
+                "{!r} is an abstract RestResource and cannot be instantiated."
+                .format(type(self)))
         self._container = container
         if self.container_class:
             if not (isinstance(container, self.container_class) and
@@ -178,8 +206,8 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
             setattr(self, attr, container)
             container = container.url
         elif not isinstance(container, basestring):
-            invalid_for_type()
-        self._url = _url_join(container, self.url_path)
+            invalid_for_type("It must be a string (URL).")
+        self._url = _url_join(container, self.url_path, safe=SEPARATOR)
 
     @classmethod
     def from_url(cls, url):
@@ -200,18 +228,20 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
 
     @classmethod
     def _get_container_from_url(cls, url):
+        original_url, url = url, _ensure_text(url)
         url_split = _url_split(url)
-        segments = url_split[2].split('/')
-        resource_segments = cls.url_path.split('/')
+        segments = [quote(_unquote(x)) for x in url_split[2].split(SEPARATOR)]
+        resource_segments = (quote(_ensure_text(cls.url_path))
+                             .rstrip(SEPARATOR).split(SEPARATOR))
         size = len(resource_segments)
         if segments[-size:] != resource_segments:
             multiple = size != 1
             raise ValueError(
                 "The last {}segment{} of the URL {!r} {} invalid for {}."
                 .format("{} ".format(size) if multiple else "",
-                        "s" if multiple else "", url,
+                        "s" if multiple else "", original_url,
                         "are" if multiple else "is", cls.__name__))
-        url_split[2] = '/'.join(segments[:-size])
+        url_split[2] = SEPARATOR.join(segments[:-size])
         return urlunsplit(url_split)
 
     def __getattr__(self, item):
@@ -236,7 +266,7 @@ class RestResource(future.with_metaclass(_RestMetaclass, object)):
         """The container of this resource.
 
         This is an instance of :attr:`container_class` if that is not `None`;
-        otherwise, this is the REST URL under which this resource resides.
+        otherwise, this is the URL under which this resource resides.
 
         Whether the container has a trailing slash determines whether the
         resource's URL includes a trailing slash.
@@ -295,19 +325,20 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
     """
 
     def __init__(self, container, id=None):
-        """Initialize an instance of this REST collection.
+        """Initialize an instance of this REST collection or a member.
 
-        `container` is interpreted the same as for `RestResource`.
+        :param str/RestResource container: See :attr:`RestResource.container`.
+        :param id: See :attr:`id`.
 
-        If `id` is None, the instance represents the collection rather than
-        one of its members.
+        The instance represents the collection when `id` is `None`; otherwise,
+        it represents one of its members.
 
         """
         super().__init__(container)
         self._id = id = self.validate_id(id)
         if id is None:
             return
-        self._url = _url_join(self._url, str(id))
+        self._url = _url_join(self._url, id)
 
     @classmethod
     def _from_url(cls, url, **kwargs):
@@ -318,31 +349,34 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
             result = super_method(url)
         except ValueError:
             result = None
-        url_split = _url_split(url)
-        segments = url_split[2].split('/')
+        url_split = _url_split(_ensure_text(url))
+        url_split[2], id = url_split[2].rsplit(SEPARATOR, 1)
         try:
-            id = cls.validate_id(segments.pop(-1))
+            id = cls.validate_id(_unquote(id))
         except ValueError:
             if result:
                 return result
             raise
-        url_split[2] = '/'.join(segments)
         collection_url = urlunsplit(url_split)
-        member_result = tryf(super_method, collection_url, id=id)
-        if result and member_result:
+        try:
+            member_result = super_method(collection_url, id=id)
+        except ValueError:
+            if result:
+                return result
+            raise
+        if result:
             raise ValueError(
                 "The URL {!r} is ambiguous for {} as to whether "
                 "it is for the collection or one of its members."
                 .format(url, cls.__name__))
-        return member_result or result
-        # return cls(cls._get_container_from_url(collection_url), id=id)
+        return member_result
 
     @classmethod
     def validate_id(cls, value):
         """Validate the given value as a valid identifier for this resource."""
+        if value is None:
+            return
         id = value
-        if id is None:
-            return id
         if not isinstance(value, cls.id_type):
             try:
                 id = cls.id_type(id)
@@ -350,7 +384,7 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
                 raise ValueError(
                     "The id {!r} cannot be cast to {!r}.  {}"
                     .format(value, cls.id_type, str(exc)))
-        if not str(id):
+        if not tryf(str, id):
             raise ValueError(
                 "The id {!r} has no string representation."
                 .format(value))
@@ -361,6 +395,19 @@ class RestCollection(future.with_metaclass(_RestCollectionMetaclass,
         """The identifier of the member within the REST collection.
 
         This is `None` if this instance represents the entire collection.
+
+        The value provided to the constructor must be one of:
+
+        * `None`
+        * an instance of :attr:`id_type`
+        * a value that can be passed alone to :attr:`id_type`
+
+        In the last case, the object that results from the instantiation
+        becomes the value of this property.
+
+        Like :attr:`url_path`, when this value is included in a URL produced
+        by the library, it is automatically cast to a string and URL-quoted,
+        except that path separators (slashes) in :attr:`id` are also quoted.
 
         """
         return self._id

@@ -103,7 +103,7 @@ default_role = 'py:obj'
 pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
-modindex_common_prefix = ['pyneric']
+modindex_common_prefix = ['pyneric.']
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
@@ -113,7 +113,7 @@ modindex_common_prefix = ['pyneric']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -348,6 +348,10 @@ intersphinx_mapping = {
         'http://docs.python.org/{}'.format(sys.version_info[0]),
         None
     ),
+    'requests': (
+        'http://docs.python-requests.org/en/latest/',
+        None
+    )
 }
 
 try:

@@ -287,7 +287,7 @@ class MetadataBehaviour(object):
                 if not callable(validate):
                     continue
                 new_value = validate(value)
-                if self._validate_transforms and new_value != value:
+                if self._validate_transforms and new_value is not value:
                     metadata[attr] = new_value
         if self._propagate_attr:
             for attr in metadata[self._propagate_attr]:
